@@ -17,3 +17,27 @@ export function useIsMobile() {
 
   return !!isMobile
 }
+
+export function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = React.useState<boolean>(false)
+
+  React.useEffect(() => {
+    const mediaQueryList = window.matchMedia(query)
+    
+    // Atualiza o estado inicial
+    setMatches(mediaQueryList.matches)
+
+    // Listener para mudanças no tamanho de tela
+    const onChange = (event: MediaQueryListEvent) => {
+      setMatches(event.matches)
+    }
+
+    mediaQueryList.addEventListener("change", onChange)
+
+    return () => {
+      mediaQueryList.removeEventListener("change", onChange)
+    }
+  }, [query])
+
+  return matches
+}
