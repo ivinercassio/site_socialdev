@@ -54,7 +54,6 @@ export function AppSidebar() {
           </div>
         </div>
       </SidebarFooter>
-
     </Sidebar>
   );
 }
