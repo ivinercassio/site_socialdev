@@ -34,22 +34,22 @@ const mockPosts = [
 
 export default function Home() {
   return (
-    <SidebarProvider className="text-neutral-800">
+    <SidebarProvider className="bg-neutral-950 text-neutral-100 min-h-screen">
       <AppSidebar /> 
 
-      {/* Fundo principal alterado para um cinza neutro bem claro (bg-neutral-100) */}
-      <main className="w-full flex flex-col min-h-screen bg-neutral-100 text-neutral-800">
+      {/* Fundo principal em dark mode neutro (bg-neutral-950) */}
+      <main className="w-full flex flex-col min-h-screen bg-neutral-950 text-neutral-100">
         
-        {/* Cabeçalho superior com fundo cinza médio suave (bg-neutral-200) e bordas em cinza (border-neutral-300) */}
-        <div className="flex items-center p-4 bg-neutral-200 border-b border-neutral-300 gap-4 w-full">
-          <SidebarTrigger className="text-neutral-600 hover:text-neutral-900 hover:bg-neutral-300" /> 
+        {/* Cabeçalho superior padronizado em bg-neutral-900 e border-neutral-800 */}
+        <div className="flex items-center px-4 bg-neutral-900 border-b border-neutral-800 gap-2 w-full">
+          <SidebarTrigger className="text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 transition-colors" /> 
           <div className="flex-grow">
             <SearchBar />
           </div>
         </div>
 
-        {/* Área do Feed com scroll vertical */}
-        <div className="flex-grow p-6 overflow-y-auto">
+        {/* Área do Feed com scroll e centralização dos posts */}
+        <div className="flex-grow p-6 overflow-y-auto flex flex-col items-center">
           <Feed posts={mockPosts} />
         </div>
 
