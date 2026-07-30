@@ -6,10 +6,6 @@ export function PostCard({ userdata, postdata, image_user, images_post }: { user
 
   const navigate = useNavigate();
 
-  function handleComments() {
-    navigate(`/comments/${postdata.id}`);
-  }
-
   return (
     <article className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-2xl font-sans text-sm overflow-hidden shadow-xl">
       
@@ -77,7 +73,7 @@ export function PostCard({ userdata, postdata, image_user, images_post }: { user
 
           {/* Comentários */}
           <button className="flex items-center gap-1.5 hover:text-blue-400 transition-colors"
-          onClick={handleComments}>
+          onClick={() => navigate(`/comments/${postdata.id}`)}>
             <MessageCircle className="w-5 h-5 stroke-[1.5]" />
             <span className="font-medium">{postdata?.commentsCount ?? 12}</span>
           </button>

@@ -11,10 +11,6 @@ import { useNavigate } from "react-router-dom";
 
 export function RequestFriendCard({ data }: { data: any }) {
   const navigate = useNavigate();
-
-  function handleVisitProfile() {
-    navigate(`/profile/${data.id}`);
-  }
   
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center justify-between shadow-lg">
@@ -34,7 +30,7 @@ export function RequestFriendCard({ data }: { data: any }) {
           {/* Ações */}
           <div className="flex gap-2 mt-2">
             <button className="px-4 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg transition-colors border border-zinc-700" 
-            onClick={handleVisitProfile}>
+            onClick={() => navigate(`/profile/${data.id}`)}>
               Visit Profile
             </button>
             <button className="px-4 py-1.5 text-sm bg-zinc-800 hover:bg-neutral-800 hover:text-green-400 hover:border-green-900/50 text-zinc-200 rounded-lg transition-colors border border-zinc-700">

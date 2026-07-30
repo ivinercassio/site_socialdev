@@ -9,7 +9,7 @@ export function NotFoundRedirect() {
       alert("Página não encontrada. Redirecionando...");
       
       // 2. Executa o redirecionamento para a página inicial
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
   }, [navigate]);
 
   // Retorna null ou uma tela visual simples de carregamento

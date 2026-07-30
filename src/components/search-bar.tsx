@@ -14,10 +14,6 @@ export function SearchBar() {
     user_data = null;
   }
 
-  function handleClick() {
-    navigate("/login");
-  }
-
   return (
     <header className="flex items-center justify-between gap-4 w-full p-3 px-4 bg-neutral-900 border-b border-neutral-800 box-border text-neutral-100">
       
@@ -37,7 +33,7 @@ export function SearchBar() {
       {/* 3. Botão de Login */}
       {user_data === null? 
       <button 
-        onClick={handleClick}
+        onClick={() => navigate("/login")}
         className="h-9 px-5 rounded-full bg-neutral-100 text-neutral-950 font-sans text-sm font-semibold hover:bg-neutral-300 transition-colors shrink-0 shadow-sm"
       >
         Login

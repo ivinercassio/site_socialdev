@@ -37,7 +37,7 @@ const mockPosts = [
 export default function Profile () {
   const { id } = useParams();
   const data_user: User | null = getUser(Number(!id));
-  const posts: Post[] | null = getAllPostsByUserId(data_user!.id);
+  let posts: Post[] | null = getAllPostsByUserId(data_user?.id);
 
   return (
     <div className="bg-neutral-950 text-neutral-100 min-h-screen flex flex-col">
@@ -53,6 +53,7 @@ export default function Profile () {
       {/* Feed Principal */}
       <main className="flex-grow p-6 overflow-y-auto flex flex-col items-center">
         {posts !== null ? <Feed posts={posts} /> : <Feed posts={mockPosts} />}
+        {/* <Feed posts={mockPosts} /> */}
       </main>
     </div>
   );

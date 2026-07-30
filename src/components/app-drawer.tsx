@@ -31,18 +31,6 @@ export function AppDrawer({ children }: AppDrawerProps) {
     user_data = null;
   }
 
-  function handleMyProfile () {
-    navigate("/myprofile");
-  }
-
-  function handleHome () {
-    navigate("/home");
-  }
-
-  function handleMyFriends () {
-    navigate("/myfriends")
-  }
-
   return (
     <Drawer direction="left">
       {/* 1. O Trigger pode encapsular o Avatar ou ser renderizado externamente */}
@@ -91,21 +79,21 @@ export function AppDrawer({ children }: AppDrawerProps) {
           {/* Links de Navegação */}
           <nav className="px-3 py-4 flex flex-col gap-1.5">
             <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-neutral-200 hover:text-white hover:bg-neutral-800 transition-all font-medium"
-            onClick={handleHome}
+            onClick={() => navigate("/home")}
             >
               <HomeIcon className="w-4 h-4 text-neutral-400" />
               <span>Home Page</span>
             </button>
 
             <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-neutral-200 hover:text-white hover:bg-neutral-800 transition-all font-medium"
-            onClick={handleMyProfile}
+            onClick={() => navigate("/myprofile")}
             >
               <UserIcon className="w-4 h-4 text-neutral-400" />
               <span>My Profile</span>
             </button>
 
             <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-neutral-200 hover:text-white hover:bg-neutral-800 transition-all font-medium"
-            onClick={handleMyFriends}>
+            onClick={() => navigate("/myfriends")}>
               <Users className="w-4 h-4 text-neutral-400" />
               <span>My Friends</span>
             </button>
@@ -133,7 +121,7 @@ export function AppDrawer({ children }: AppDrawerProps) {
           <div className="flex justify-center items-center">
             <div className="flex items-center gap-2 border border-neutral-700 px-5 py-2.5 rounded-xl bg-neutral-800 text-neutral-300 tracking-wider text-xs uppercase font-semibold">
               <Code2 className="w-4 h-4 text-neutral-200" />
-              <span onClick={handleHome}>Social.DEV</span>
+              <span onClick={() => navigate("/home")}>Social.DEV</span>
             </div>
           </div>
         </DrawerFooter>
