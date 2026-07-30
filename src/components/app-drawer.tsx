@@ -5,6 +5,7 @@ import type { User } from "../models/User";
 import { useNavigate } from "react-router-dom";
 import { ChangeVisibilityModal } from "./change-visibility-modal";
 import { useState } from "react";
+import { clearUser } from "../models/LoginDTO";
 
 interface AppDrawerProps {
   children?: React.ReactNode;
@@ -22,6 +23,10 @@ export function AppDrawer({ children }: AppDrawerProps) {
     console.log("Nova visibilidade salva no servidor:", newVisibility);
   };
 
+  function handleLogout () {
+    clearUser();
+    navigate("/login");
+  }
 
   let user_data: User | null = null;
   try {
@@ -113,7 +118,8 @@ export function AppDrawer({ children }: AppDrawerProps) {
 
         {/* Footer com Logout e Marca */}
         <DrawerFooter className="px-3 pb-6 flex flex-col gap-4 border-t border-neutral-800 pt-4 bg-neutral-900">
-          <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-colors font-medium">
+          <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-colors font-medium"
+          onClick={handleLogout}>
             <LogOut className="w-4 h-4 text-red-400" />
             <span>Logout</span>
           </button>

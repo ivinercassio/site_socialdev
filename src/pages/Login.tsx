@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { doLogin, type LoginRequest } from '../models/LoginDTO';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Lógica de autenticação
-    console.log('Dados enviados:', { username, password });
-    navigate("/home");
+
+    const data: LoginRequest = { username, password };
+    console.log('Dados enviados:', data);
+    const user = await doLogin(data);
+  
+    if (user) {
+      navigate("/home");
+    } else {
+      console.error("Erro ao fazer login. Verifique as credenciais.");
+    }
   };
 
   return (

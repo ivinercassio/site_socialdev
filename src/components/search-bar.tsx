@@ -8,7 +8,7 @@ export function SearchBar() {
 
   let user_data: User | null = null;
   try {
-    const stored = localStorage.getItem("user_data");
+    const stored = localStorage.getItem("user");
     if (stored) user_data = JSON.parse(stored);
   } catch {
     user_data = null;
