@@ -6,6 +6,7 @@ const mockPosts = [
     id: "1",
     userdata: { username: "dev_junior", name: "Junior" },
     postdata: { 
+      id: "1",
       legend: "Construindo interfaces componentizadas com React e Tailwind CSS! 🚀", 
       createdAt: "15/07/2026", 
       likesCount: 250, 
@@ -19,6 +20,7 @@ const mockPosts = [
     id: "2",
     userdata: { username: "ui_designer", name: "Sarah" },
     postdata: { 
+      id: "2",
       legend: "Seguindo fielmente os wireframes impressos e esboços de baixa fidelidade.", 
       createdAt: "16/07/2026", 
       likesCount: 184, 

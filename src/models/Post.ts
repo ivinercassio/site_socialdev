@@ -8,3 +8,7 @@ export interface Post {
     like: number;
     date_published: Date;
 }
+
+export function getAllPostsByUserId(id: number): Post[] | null {
+    return null;
+}

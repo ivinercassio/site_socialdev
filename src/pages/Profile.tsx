@@ -1,6 +1,9 @@
 import { SearchBar } from "../components/search-bar";
 import { Feed } from "../components/feed";
 import { AppProfile } from "../components/app-profile";
+import { useParams } from "react-router-dom";
+import { getUser, type User } from "../models/User";
+import { getAllPostsByUserId, type Post } from "../models/Post";
 
 const mockPosts = [
   {
@@ -32,6 +35,10 @@ const mockPosts = [
 ];
 
 export default function Profile () {
+  const { id } = useParams();
+  const data_user: User | null = getUser(Number(!id));
+  const posts: Post[] | null = getAllPostsByUserId(data_user!.id);
+
   return (
     <div className="bg-neutral-950 text-neutral-100 min-h-screen flex flex-col">
       {/* Cabeçalho */}
@@ -45,7 +52,7 @@ export default function Profile () {
 
       {/* Feed Principal */}
       <main className="flex-grow p-6 overflow-y-auto flex flex-col items-center">
-        <Feed posts={mockPosts} />
+        {posts !== null ? <Feed posts={posts} /> : <Feed posts={mockPosts} />}
       </main>
     </div>
   );

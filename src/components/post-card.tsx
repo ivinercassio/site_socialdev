@@ -1,8 +1,16 @@
 import { Heart, MessageCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-export function PostCard({ userdata, postdata, image_user, images_post }) {
+export function PostCard({ userdata, postdata, image_user, images_post }: { userdata: any, postdata: any, image_user: any, images_post: any }) {
+
+  const navigate = useNavigate();
+
+  function handleComments() {
+    navigate(`/comments/${postdata.id}`);
+  }
+
   return (
-    <article className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-2xl font-sans text-sm mb-6 overflow-hidden shadow-xl">
+    <article className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-2xl font-sans text-sm overflow-hidden shadow-xl">
       
       {/* 1. Cabeçalho do Post - Unificado e Limpo */}
       <header className="flex items-center justify-between p-4 bg-neutral-900">
@@ -10,7 +18,7 @@ export function PostCard({ userdata, postdata, image_user, images_post }) {
           {/* Foto/Ícone de Perfil */}
           <div className="w-10 h-10 rounded-full border border-neutral-700 flex items-center justify-center overflow-hidden bg-neutral-800 shrink-0">
             {image_user?.url ? (
-              <img src={image_user.url} alt={userdata?.name} className="w-full h-full object-cover" />
+              <img src={image_user.url} alt={userdata?.username} className="w-full h-full object-cover" />
             ) : (
               <span className="text-xs font-medium text-neutral-400">User</span>
             )}
@@ -67,7 +75,8 @@ export function PostCard({ userdata, postdata, image_user, images_post }) {
           </button>
 
           {/* Comentários */}
-          <button className="flex items-center gap-1.5 hover:text-blue-400 transition-colors">
+          <button className="flex items-center gap-1.5 hover:text-blue-400 transition-colors"
+          onClick={handleComments}>
             <MessageCircle className="w-5 h-5 stroke-[1.5]" />
             <span className="font-medium">{postdata?.commentsCount ?? 12}</span>
           </button>

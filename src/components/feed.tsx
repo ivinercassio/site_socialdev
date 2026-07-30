@@ -10,7 +10,7 @@ import { PostCard } from './post-card';
 // ];
 
 
-export function Feed({ posts }) {
+export function Feed({ posts }: { posts: any[] }) {
   // Caso a lista de posts esteja vazia ou não tenha sido carregada ainda
   if (!posts || posts.length === 0) {
     return (
@@ -21,10 +21,10 @@ export function Feed({ posts }) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full max-w-2xl mx-auto py-4">
+    <div className="flex flex-col items-center gap-6 w-full max-w-2xl mx-auto">
       {posts.map((post) => (
         <PostCard
-          key={post.id || post.postdata?.id} // Certifique-se de usar uma chave única para cada item
+          key={post.id} // Certifique-se de usar uma chave única para cada item
           userdata={post.userdata}
           postdata={post.postdata}
           image_user={post.image_user}
