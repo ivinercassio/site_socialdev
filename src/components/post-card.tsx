@@ -1,5 +1,6 @@
 import { Heart, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ReportModal } from './report-modal';
 
 export function PostCard({ userdata, postdata, image_user, images_post }: { userdata: any, postdata: any, image_user: any, images_post: any }) {
 
@@ -88,9 +89,17 @@ export function PostCard({ userdata, postdata, image_user, images_post }: { user
         </div>
 
         {/* Lado Direito: Botão Report - Sutil */}
-        <button className="px-3 py-1 text-xs font-medium text-neutral-400 rounded-md border border-neutral-700 hover:bg-red-950/50 hover:text-red-400 hover:border-red-400 transition-colors">
-          Report
-        </button>
+        <ReportModal
+          type="post"
+          onConfirm={(reason) => {
+            console.log("Comentário denunciado! Motivo:", reason)
+          }}
+          trigger={
+            <button className="px-3 py-1 text-xs font-medium text-neutral-400 rounded-md border border-neutral-700 hover:bg-red-950/50 hover:text-red-400 hover:border-red-400 transition-colors">
+              Report
+            </button>
+          }
+        />
       </footer>
 
     </article>

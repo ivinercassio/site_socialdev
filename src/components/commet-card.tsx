@@ -1,3 +1,5 @@
+import { ReportModal } from "./report-modal";
+
 export interface CommentData {
   id: string;
   username: string;
@@ -34,6 +36,19 @@ export function CommentCard({ data }: CommentCardProps) {
           {data.content}
         </p>
       </div>
+
+      {/* Lado Direito: Botão Report - Sutil */}
+        <ReportModal
+        type="comment"
+        onConfirm={(reason) => {
+            console.log("Comentário denunciado! Motivo:", reason)
+        }}
+        trigger={
+            <button className="px-3 py-1 text-xs font-medium text-neutral-400 rounded-md border border-neutral-700 hover:bg-red-950/50 hover:text-red-400 hover:border-red-400 transition-colors">
+            Report
+            </button>
+        }
+        />
     </div>
   );
 }
