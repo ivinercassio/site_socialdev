@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button' 
 
 // interface FriendCardProps {
@@ -5,12 +6,21 @@ import { Button } from '../components/ui/button'
 //   username?: string
 //   friendsSince?: string
 //   isPrivate?: boolean
-//   onVisitProfile?: () => void
-//   onChat?: () => void
 //   onUnfollow?: () => void
 // }
 
 export function FriendCard({ data }: { data: any }) {
+
+  const navigate = useNavigate();
+
+  function handleVisitProfile() {
+    navigate(`/profile/${data.id}`);
+  }
+
+  function handleChat() {
+    navigate(`/chat/${data.id}`);
+  }
+  
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center justify-between shadow-lg">
       <div className="flex items-center gap-4">
@@ -43,7 +53,7 @@ export function FriendCard({ data }: { data: any }) {
           <div className="flex flex-wrap items-center gap-2 pt-2">
             <Button
               variant="outline"
-              onClick={data.onVisitProfile}
+              onClick={handleVisitProfile}
               className="px-4 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg transition-colors border border-zinc-700"
             >
               Visit Profile
@@ -51,7 +61,7 @@ export function FriendCard({ data }: { data: any }) {
 
             <Button
               variant="outline"
-              onClick={data.onChat}
+              onClick={handleChat}
               className="px-4 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg transition-colors border border-zinc-700"
             >
               Chat

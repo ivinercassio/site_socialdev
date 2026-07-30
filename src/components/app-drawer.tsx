@@ -1,5 +1,5 @@
 import { Drawer, DrawerContent, DrawerHeader, DrawerFooter, DrawerTrigger, DrawerClose} from "./ui/drawer";
-import { User as UserIcon, Users, Eye, LogOut, Code2, X } from "lucide-react";
+import { User as UserIcon, Users, Eye, LogOut, Code2, X, HomeIcon } from "lucide-react";
 import image_profile from "../assets/hero.png";
 import type { User } from "../models/User";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +35,7 @@ export function AppDrawer({ children }: AppDrawerProps) {
     navigate("/myprofile");
   }
 
-  function handlekHome () {
+  function handleHome () {
     navigate("/home");
   }
 
@@ -91,6 +91,13 @@ export function AppDrawer({ children }: AppDrawerProps) {
           {/* Links de Navegação */}
           <nav className="px-3 py-4 flex flex-col gap-1.5">
             <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-neutral-200 hover:text-white hover:bg-neutral-800 transition-all font-medium"
+            onClick={handleHome}
+            >
+              <HomeIcon className="w-4 h-4 text-neutral-400" />
+              <span>Home Page</span>
+            </button>
+
+            <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-neutral-200 hover:text-white hover:bg-neutral-800 transition-all font-medium"
             onClick={handleMyProfile}
             >
               <UserIcon className="w-4 h-4 text-neutral-400" />
@@ -126,7 +133,7 @@ export function AppDrawer({ children }: AppDrawerProps) {
           <div className="flex justify-center items-center">
             <div className="flex items-center gap-2 border border-neutral-700 px-5 py-2.5 rounded-xl bg-neutral-800 text-neutral-300 tracking-wider text-xs uppercase font-semibold">
               <Code2 className="w-4 h-4 text-neutral-200" />
-              <span onClick={handlekHome}>Social.DEV</span>
+              <span onClick={handleHome}>Social.DEV</span>
             </div>
           </div>
         </DrawerFooter>

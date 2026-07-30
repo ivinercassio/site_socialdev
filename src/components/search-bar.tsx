@@ -1,9 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { AppDrawer } from "./app-drawer";
+import type { User } from "../models/User";
 
 export function SearchBar() {
   const navigate = useNavigate();
+
+  let user_data: User | null = null;
+  try {
+    const stored = localStorage.getItem("user_data");
+    if (stored) user_data = JSON.parse(stored);
+  } catch {
+    user_data = null;
+  }
 
   function handleClick() {
     navigate("/login");
@@ -13,7 +22,7 @@ export function SearchBar() {
     <header className="flex items-center justify-between gap-4 w-full p-3 px-4 bg-neutral-900 border-b border-neutral-800 box-border text-neutral-100">
       
       {/* 1. O Drawer é acionado ao clicar na Foto do Perfil */}
-      <AppDrawer />
+      {user_data !== null ? <AppDrawer /> : <div></div>}
 
       {/* 2. Input de Pesquisa */}
       <div className="flex-grow max-w-2xl relative flex items-center">
@@ -26,12 +35,13 @@ export function SearchBar() {
       </div>
 
       {/* 3. Botão de Login */}
+      {user_data === null? 
       <button 
         onClick={handleClick}
         className="h-9 px-5 rounded-full bg-neutral-100 text-neutral-950 font-sans text-sm font-semibold hover:bg-neutral-300 transition-colors shrink-0 shadow-sm"
       >
         Login
-      </button>
+      </button> : <div></div>}
 
     </header>
   );
