@@ -1,4 +1,4 @@
-import { PostComponent } from './app-post'; 
+import { PostCard } from './post-card'; 
 
 // const postsExemplo = [
 //   {
@@ -23,7 +23,7 @@ export function Feed({ posts }) {
   return (
     <div className="flex flex-col items-center gap-6 w-full max-w-2xl mx-auto py-4">
       {posts.map((post) => (
-        <PostComponent
+        <PostCard
           key={post.id || post.postdata?.id} // Certifique-se de usar uma chave única para cada item
           userdata={post.userdata}
           postdata={post.postdata}

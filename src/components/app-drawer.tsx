@@ -38,16 +38,10 @@ export function AppDrawer({ children }: AppDrawerProps) {
   function handlekHome () {
     navigate("/home");
   }
-  
-  function handleVisibilityBar () {
-    return (
-      <ChangeVisibilityModal 
-        isPublic={isPublicProfile} 
-        onConfirm={handleVisibilityChange} 
-      />
-    )
-  }
 
+  function handleMyFriends () {
+    navigate("/myfriends")
+  }
 
   return (
     <Drawer direction="left">
@@ -103,7 +97,8 @@ export function AppDrawer({ children }: AppDrawerProps) {
               <span>My Profile</span>
             </button>
 
-            <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-neutral-200 hover:text-white hover:bg-neutral-800 transition-all font-medium">
+            <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-neutral-200 hover:text-white hover:bg-neutral-800 transition-all font-medium"
+            onClick={handleMyFriends}>
               <Users className="w-4 h-4 text-neutral-400" />
               <span>My Friends</span>
             </button>

@@ -1,6 +1,6 @@
 import { Heart, MessageCircle } from 'lucide-react';
 
-export function PostComponent({ userdata, postdata, image_user, images_post }) {
+export function PostCard({ userdata, postdata, image_user, images_post }) {
   return (
     <article className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-2xl font-sans text-sm mb-6 overflow-hidden shadow-xl">
       

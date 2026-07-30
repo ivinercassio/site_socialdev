@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Profile from "./pages/Profile"
+import { Friends } from "./pages/Friends"
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
 
       <Route path="/login" element={<Login />} />
       <Route path="/myprofile" element={<Profile />} />
+      <Route path="/myfriends" element={<Friends />} />
       
       {/* Rota para página não encontrada (404) */}
       <Route path="*" element={<div className="p-8">Página não encontrada.</div>} />
