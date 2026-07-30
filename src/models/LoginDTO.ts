@@ -32,3 +32,7 @@ function saveUser(data: LoginResponse) {
 export function clearUser() {
     localStorage.clear();
 }
+
+export function getCurrentUser() : User {
+  return JSON.parse(localStorage.getItem("user")!);
+}

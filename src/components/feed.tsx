@@ -1,10 +1,11 @@
+import type { PostResponse } from '../models/Post';
 import { PostCard } from './post-card'; 
 
-export function Feed({ posts }: { posts: any[] }) {
+export function Feed({ posts }: { posts: PostResponse[] }) {
   // Caso a lista de posts esteja vazia ou não tenha sido carregada ainda
-  if (!posts || posts.length === 0) {
+  if (!Array.isArray(posts) || posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 border border-dashed border-black bg-gray-50 text-gray-500 font-sans">
+      <div className="flex flex-col items-center justify-center p-12 border border-dashed border-black bg-neutral-950 text-neutral-100 font-sans">
         <p className="text-base font-medium">Nenhum post encontrado no feed.</p>
       </div>
     );

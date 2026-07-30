@@ -20,13 +20,19 @@ export interface PostResponse {
     date_published: Date;
 }
 
-export function getAllPostsByUserId(id: number): Post[] | null {
+export async function getAllPostsByUserId(id: number): Promise<PostResponse[] | null> {
+  try {
+    const response = await api.get<PostResponse[]>(`posts/${id}`);
+    return response.data; 
+  } catch (error) {
+    console.error("Falha ao realizar get dos Posts!", error);
     return null;
+  }
 }
 
-export async function getAllPosts(): Promise<Post[] | null> {
+export async function getAllPosts(): Promise<PostResponse[] | null> {
   try {
-    const response = await api.get<Post[]>('posts/');
+    const response = await api.get<PostResponse[]>('posts/');
     return response.data; 
   } catch (error) {
     console.error("Falha ao realizar get dos Posts!", error);

@@ -2,7 +2,7 @@ import { Heart, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ReportModal } from './report-modal';
 import type { PostResponse } from '../models/Post';
-import { getAllMideasByPostId, getMideaProfile } from '../models/Midea';
+import { getAllMideasByPostId, getMideaProfileUserById } from '../models/Midea';
 import { useEffect, useState } from 'react';
 import type { Midea } from '../models/Midea';
 import type { Tag } from '../models/Tag';
@@ -16,11 +16,11 @@ export function PostCard({ post }: { post: PostResponse }) {
   const navigate = useNavigate();
   
     useEffect(() => {
-      async function loadMideaProfile() {
-        // const data = await getMideaProfile(post.author.id);
+      async function loadProfileById() {
+        // const data = await getMideaProfileUserById(post.author.id);
         // setImageUser(data!); 
       }
-      loadMideaProfile();
+      loadProfileById();
     }, []);
 
     useEffect(() => {
@@ -114,7 +114,7 @@ export function PostCard({ post }: { post: PostResponse }) {
           {/* Hashtag */}
           <span className="text-neutral-400 font-medium">
             {tagsPost.map((tag, index) => (
-              <span key={index}>
+              <span key={index} className='ms-1'>
                 #{tag.theme}
               </span>
             ))}

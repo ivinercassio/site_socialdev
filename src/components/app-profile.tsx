@@ -1,28 +1,48 @@
-// Definição de tipos para as props (opcional, mas recomendado)
-interface AppProfileProps {
-  avatarUrl?: string; // URL para a imagem real
-  username?: string;
-  aboutText?: string;
-  friendsCount?: number;
-  isPublic?: boolean;
-  joinedDate?: string;
-}
+import { useEffect, useState } from "react";
+import type { Midea } from "../models/Midea";
+import { getUserById, type User } from "../models/User";
+import { getAllFriendsByUserId, } from "../models/Friend";
+import { useParams } from "react-router-dom";
+import { getCurrentUser } from "../models/LoginDTO";
 
-export function AppProfile({
-  avatarUrl,
-  username = '@username',
-  aboutText = 'TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT',
-  friendsCount = 65,
-  isPublic = true,
-  joinedDate = '11/05/2019',
-}: AppProfileProps) {
+export function AppProfile() {
+  const { id } = useParams();
+  const [imageUser, setImageUser] = useState<Midea>();
+  const [user, setUser] = useState<User>();
+  const [friends, setFriends] = useState<number>();
   
-  // -- PALETA DE CORES AJUSTADA PARA DARK MODE (baseada na image_1.png) --
-  // Fundo do card: bg-neutral-900 (cinza muito escuro, similar ao post card)
-  // Bordas: border-neutral-700 (cinza médio, visível contra o fundo)
-  // Texto Principal (Username, Títulos): text-white (branco puro)
-  // Texto Secundário (About, Info): text-neutral-300 (cinza claro para leitura)
-  // Círculo do Avatar: border-white (como na imagem original)
+  useEffect(() => {
+    async function loadMideaProfile() {
+      // const data = await getMideaProfile(post.author.id);
+      // setImageUser(data!); 
+    }
+    loadMideaProfile();
+  }, []);
+  
+  useEffect(() => {
+    async function loadUserData() {
+      if (!id) 
+        setUser(getCurrentUser());
+      else {
+        const data = await getUserById(Number(id));
+        setUser(data!);
+      }
+    }
+    loadUserData();
+  }, []);
+
+  useEffect(() => {
+    async function loadFriends() {
+      let param = Number(id);
+      if (!id) {
+        const user = getCurrentUser();
+        param = user.id;
+      } 
+      const data = await getAllFriendsByUserId(param);
+      setFriends(data!.length);
+    }
+    loadFriends();
+  }, []);
 
   return (
     // Container Principal: Ajustado para fundo escuro e bordas sutis
@@ -34,10 +54,10 @@ export function AppProfile({
           
           {/* Círculo do Avatar: Mantido com borda branca para contraste */}
           <div className="w-28 h-28 rounded-full border border-white flex items-center justify-center overflow-hidden bg-neutral-800">
-            {avatarUrl ? (
+            {imageUser?.link ? (
               <img 
-                src={avatarUrl} 
-                alt={username} 
+                src={imageUser.link} 
+                alt={user?.username} 
                 className="w-full h-full object-cover" 
               />
             ) : (
@@ -48,7 +68,7 @@ export function AppProfile({
           
           {/* Username: Alterado para branco puro */}
           <span className="text-base font-medium tracking-wide text-white">
-            {username}
+            {user?.username}
           </span>
         </div>
 
@@ -61,7 +81,7 @@ export function AppProfile({
             <h3 className="text-base font-semibold text-white">About</h3>
             {/* Texto: Alterado para cinza claro */}
             <p className="text-sm tracking-wide leading-relaxed uppercase break-words text-neutral-300">
-              {aboutText}
+              {user?.about}
             </p>
           </div>
 
@@ -69,14 +89,14 @@ export function AppProfile({
           <div className="text-sm text-neutral-300">
             <span>Friends: </span>
             {/* Número: Alterado para branco para destaque */}
-            <span className="font-semibold text-white">{friendsCount}</span>
+            <span className="font-semibold text-white">{friends}</span>
           </div>
 
           {/* Rodapé: Status do Perfil e Data: Texto para cinza claro */}
           <div className="text-xs pt-2 text-neutral-400 flex items-center gap-2">
-            <span>{isPublic ? 'Public Profile' : 'Private Profile'}</span>
+            <span>{user?.public ? 'Public Profile' : 'Private Profile'}</span>
             <span className="text-neutral-600">|</span>
-            <span>Joined us at {joinedDate}</span>
+            <span>Joined us at {new Date(user?.creation_date!).toLocaleDateString('pt-BR')}</span>
           </div>
 
         </div>
