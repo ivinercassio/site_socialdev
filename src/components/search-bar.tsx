@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
-import image_profile from "../assets/hero.png";
+import { AppDrawer } from "./app-drawer";
 
 export function SearchBar() {
   const navigate = useNavigate();
@@ -10,20 +10,12 @@ export function SearchBar() {
   }
 
   return (
-    <header className="flex items-center justify-between gap-4 w-full p-3 px-6 bg-neutral-900 border-b border-neutral-800 box-border text-neutral-100">
+    <header className="flex items-center justify-between gap-4 w-full p-3 px-4 bg-neutral-900 border-b border-neutral-800 box-border text-neutral-100">
       
-      {/* 1. Perfil / Avatar */}
-      <div className="flex items-center gap-3 shrink-0">
-        <div className="w-10 h-10 rounded-full border border-neutral-700 overflow-hidden flex items-center justify-center bg-neutral-800 cursor-pointer hover:border-neutral-500 transition-colors">
-          <img 
-            src={image_profile} 
-            alt="User profile" 
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div>
+      {/* 1. O Drawer é acionado ao clicar na Foto do Perfil */}
+      <AppDrawer />
 
-      {/* 2. Input de Pesquisa com Ícone */}
+      {/* 2. Input de Pesquisa */}
       <div className="flex-grow max-w-2xl relative flex items-center">
         <Search className="w-4 h-4 absolute left-3.5 text-neutral-400 pointer-events-none" />
         <input 

@@ -1,4 +1,4 @@
-import { PostComponent } from './post-component'; 
+import { PostComponent } from './app-post'; 
 
 // const postsExemplo = [
 //   {
