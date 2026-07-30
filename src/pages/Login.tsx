@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doLogin, type LoginRequest } from '../models/LoginDTO';
+import { getMideaProfile } from '../models/Midea';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -11,10 +12,11 @@ export default function Login() {
     e.preventDefault();
 
     const data: LoginRequest = { username, password };
-    console.log('Dados enviados:', data);
     const user = await doLogin(data);
+    console.log(user);
   
     if (user) {
+      // getMideaProfile(user.user.id);
       navigate("/home");
     } else {
       console.error("Erro ao fazer login. Verifique as credenciais.");

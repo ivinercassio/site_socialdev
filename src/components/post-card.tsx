@@ -1,10 +1,43 @@
 import { Heart, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ReportModal } from './report-modal';
+import type { PostResponse } from '../models/Post';
+import { getAllMideasByPostId, getMideaProfile } from '../models/Midea';
+import { useEffect, useState } from 'react';
+import type { Midea } from '../models/Midea';
+import type { Tag } from '../models/Tag';
+import { getAllTagsByPostId } from '../models/PostTag';
 
-export function PostCard({ userdata, postdata, image_user, images_post }: { userdata: any, postdata: any, image_user: any, images_post: any }) {
+export function PostCard({ post }: { post: PostResponse }) {
 
+  const [imageUser, setImageUser] = useState<Midea>();
+  const [imagesPost, setImagesPost] = useState<Midea[]>([]);
+  const [tagsPost, setTagsPost] = useState<Tag[]>([]);
   const navigate = useNavigate();
+  
+    useEffect(() => {
+      async function loadMideaProfile() {
+        // const data = await getMideaProfile(post.author.id);
+        // setImageUser(data!); 
+      }
+      loadMideaProfile();
+    }, []);
+
+    useEffect(() => {
+      async function loadMidasPost() {
+        const data = await getAllMideasByPostId(post.id);
+        setImagesPost(data!); 
+      }
+      loadMidasPost();
+    }, []);
+
+    useEffect(() => {
+      async function loadTagsPost() {
+        const data = await getAllTagsByPostId(post.id);
+        setTagsPost(data!); 
+      }
+      loadTagsPost();
+    }, []);
 
   return (
     <article className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-2xl font-sans text-sm overflow-hidden shadow-xl">
@@ -14,22 +47,22 @@ export function PostCard({ userdata, postdata, image_user, images_post }: { user
         <div className="flex items-center gap-3">
           {/* Foto/Ícone de Perfil */}
           <div className="w-10 h-10 rounded-full border border-neutral-700 flex items-center justify-center overflow-hidden bg-neutral-800 shrink-0">
-            {image_user?.url ? (
-              <img src={image_user.url} alt={userdata?.username} className="w-full h-full object-cover" />
+            {imageUser?.link ? (
+              <img src={imageUser?.link} alt={post.author_username} className="w-full h-full object-cover" />
             ) : (
               <span className="text-xs font-medium text-neutral-400">User</span>
             )}
           </div>
           {/* @username */}
           <span className="font-semibold text-neutral-100">
-            @{userdata?.username || 'username'}
+            @{post.author_username || 'username'}
           </span>
         </div>
 
         <div className="flex items-center gap-4">
           {/* Data de Publicação */}
           <time className="text-neutral-400 text-xs">
-            {postdata?.createdAt || '15/07/2026'}
+            {new Date(post.date_published).toLocaleDateString('pt-BR') || '15/07/2026'}
           </time>
           {/* Botão + Follow - Estilo Dark Button */}
           <button className="px-4 py-1.5 rounded-full font-semibold bg-neutral-100 text-neutral-950 hover:bg-neutral-300 transition-colors">
@@ -42,14 +75,14 @@ export function PostCard({ userdata, postdata, image_user, images_post }: { user
       <div className="px-4 pb-4 flex flex-col gap-4">
         {/* Legenda */}
         <p className="text-neutral-100 break-words leading-relaxed">
-          {postdata?.legend || 'Legend...Legend...Legend....Legend...'}
+          {post.legend || 'Legend...Legend...Legend....Legend...'}
         </p>
 
         {/* Container de Imagem / Vídeo - Arredondado e Escuro */}
         <div className="w-full aspect-video rounded-xl border border-neutral-700 flex items-center justify-center bg-neutral-800 overflow-hidden">
-          {images_post && images_post.length > 0 ? (
+          {imagesPost && imagesPost.length > 0 ? (
             <img 
-              src={images_post[0].url} 
+              src={imagesPost[0].link} 
               alt="Conteúdo do post" 
               className="w-full h-full object-cover"
             />
@@ -68,19 +101,23 @@ export function PostCard({ userdata, postdata, image_user, images_post }: { user
           {/* Likes */}
           <button className="flex items-center gap-1.5 hover:text-red-400 transition-colors group">
             <Heart className="w-5 h-5 stroke-[1.5] group-hover:fill-red-400 transition-colors" />
-            <span className="font-medium">{postdata?.likesCount ?? 250}</span>
+            <span className="font-medium">{post.like ?? 250}</span>
           </button>
 
           {/* Comentários */}
           <button className="flex items-center gap-1.5 hover:text-blue-400 transition-colors"
-          onClick={() => navigate(`/comments/${postdata.id}`)}>
+          onClick={() => navigate(`/comments/${post.id}`)}>
             <MessageCircle className="w-5 h-5 stroke-[1.5]" />
-            <span className="font-medium">{postdata?.commentsCount ?? 12}</span>
+            {/* <span className="font-medium">{postdata?.commentsCount ?? 12}</span> */}
           </button>
 
           {/* Hashtag */}
           <span className="text-neutral-400 font-medium">
-            {postdata?.tag ? `#${postdata.tag}` : '#tag'}
+            {tagsPost.map((tag, index) => (
+              <span key={index}>
+                #{tag.theme}
+              </span>
+            ))}
           </span>
         </div>
 

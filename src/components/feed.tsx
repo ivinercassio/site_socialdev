@@ -1,15 +1,5 @@
 import { PostCard } from './post-card'; 
 
-// const postsExemplo = [
-//   {
-//     userdata: { username: "joaosilva", name: "João" },
-//     postdata: { id: "1", legend: "Minha primeira publicação!", createdAt: "29/07/2026", likesCount: 340, commentsCount: 22, tag: "tech" },
-//     image_user: { url: "https://link-da-foto.com" },
-//     images_post: [{ url: "https://link-da-foto.com" }]
-//   }
-// ];
-
-
 export function Feed({ posts }: { posts: any[] }) {
   // Caso a lista de posts esteja vazia ou não tenha sido carregada ainda
   if (!posts || posts.length === 0) {
@@ -24,11 +14,8 @@ export function Feed({ posts }: { posts: any[] }) {
     <div className="flex flex-col items-center gap-6 w-full max-w-2xl mx-auto">
       {posts.map((post) => (
         <PostCard
-          key={post.id} // Certifique-se de usar uma chave única para cada item
-          userdata={post.userdata}
-          postdata={post.postdata}
-          image_user={post.image_user}
-          images_post={post.images_post}
+          key={post.id} 
+          post={post}
         />
       ))}
     </div>

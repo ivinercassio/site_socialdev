@@ -15,7 +15,6 @@ export interface LoginResponse {
 export async function doLogin(data: LoginRequest): Promise<LoginResponse | null> {
   try {
     const response = await api.post<LoginResponse>('token/', data);
-    console.log(response.data);
     saveUser(response.data); 
     return response.data; 
   } catch (error) {

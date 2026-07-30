@@ -1,3 +1,4 @@
+import api from "../services/api";
 import type { Post } from "./Post";
 import type { User } from "./User";
 
@@ -8,4 +9,28 @@ export interface Midea {
     image_profile: boolean;
     file?: Blob;
     link: string;
+}
+
+export async function getMideaProfile(id: number): Promise<Midea | null> {
+  let midea = localStorage.getItem("midea_profile");
+  if (midea !== null) 
+    return JSON.parse(midea);
+  else 
+    try {
+        const response = await api.post<Midea>(`mideas/${id}/user`);
+        return response.data; 
+    } catch (error) {
+        console.error("Falha ao realizar o get da Midea Profile do usuário!", error);
+        return null;
+    }
+}
+
+export async function getAllMideasByPostId(id:number): Promise<Midea[] | null> {
+    try {
+    const response = await api.get<Midea[]>(`mideas/${id}/post`);
+    return response.data; 
+  } catch (error) {
+    console.error(`Falha ao realizar get das Mideas do Post #${id}!`, error);
+    return null;
+  }
 }
