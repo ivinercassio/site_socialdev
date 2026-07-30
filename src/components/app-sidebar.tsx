@@ -6,7 +6,7 @@ export function AppSidebar() {
   const user_data: User = JSON.parse(localStorage.getItem("user_data")!);
 
   return (
-    <Sidebar className="border-r border-gray-300 bg-white h-screen flex flex-col justify-between w-64 text-sm font-medium">
+    <Sidebar variant="sidebar" className="border-r border-gray-300 bg-white h-screen flex flex-col justify-between w-64 text-sm font-medium">
       
       {/* Header: Foto e Username */}
       <SidebarHeader className="border-b border-gray-300 py-6 flex flex-col items-center justify-center gap-2">
