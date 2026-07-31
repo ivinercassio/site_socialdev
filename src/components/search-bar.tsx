@@ -2,17 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { AppDrawer } from "./app-drawer";
 import type { User } from "../models/User";
+import { getCurrentUser } from "../models/LoginDTO";
 
 export function SearchBar() {
   const navigate = useNavigate();
 
-  let user_data: User | null = null;
-  try {
-    const stored = localStorage.getItem("user");
-    if (stored) user_data = JSON.parse(stored);
-  } catch {
-    user_data = null;
-  }
+  const user_data: User = getCurrentUser();
 
   return (
     <header className="flex items-center justify-between gap-4 w-full p-3 px-4 bg-neutral-900 border-b border-neutral-800 box-border text-neutral-100">

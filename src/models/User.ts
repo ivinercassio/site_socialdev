@@ -19,3 +19,16 @@ export async function getUserById(id: number): Promise<User | null >{
     return null;
   }
 }
+
+export async function chageVisibility(id: number, visible: boolean): Promise<boolean | null >{
+  try {
+    const objeto = {
+      public : visible
+    }
+    const response = await api.put<User>(`users/${id}/`, objeto);
+    return response.data.public; 
+  } catch (error) {
+    console.error("Falha ao atualizar visibilidade do usuário!", error);
+    return null;
+  }
+}

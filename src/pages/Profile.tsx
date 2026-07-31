@@ -24,9 +24,9 @@ export default function Profile () {
       if (Array.isArray(data)) {
         setPosts(data);
       } else if (data) {
-        setPosts([data]); // Se for um objeto único, envelopa em um array
+        setPosts([data]);
       } else {
-        setPosts([]); // Se for nulo/erro, limpa o estado
+        setPosts([]); 
       }
     }
     loadPosts();

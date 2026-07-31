@@ -1,5 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button' 
+import type { FriendResponse } from '../models/Friend';
+import { getCurrentUser } from '../models/LoginDTO';
+import { useEffect, useState } from 'react';
+import { getUserById, type User } from '../models/User';
+import type { Midea } from '../models/Midea';
+
 
 // interface FriendCardProps {
 //   avatarUrl?: string
@@ -9,9 +15,34 @@ import { Button } from '../components/ui/button'
 //   onUnfollow?: () => void
 // }
 
-export function FriendCard({ data }: { data: any }) {
+export function FriendCard({ data }: { data: FriendResponse }) {
 
   const navigate = useNavigate();
+  const user = getCurrentUser();
+  const [userFriend, setUserFriend] = useState<User>();
+  const [image, setImage] = useState<Midea>();
+
+  useEffect(() => {
+    async function loadUserFriend() {
+      let param;
+      data.friend_one === user.id ? param = data.friend_two : param = data.friend_one;
+      const response = await getUserById(param);
+      setUserFriend(response!);
+    }
+    loadUserFriend();
+  }, []);
+
+  useEffect(() => {
+    async function loadMideaProfile() {
+      // const data = await getMideaProfile(userFriend.id);
+      // setImage(data!); 
+    }
+    loadMideaProfile();
+  }, []);
+
+  function handleUnfollow () {
+    console.log(`Amizade desfeita com o usuário: ${userFriend?.username}`);
+  }
   
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center justify-between shadow-lg">
@@ -19,10 +50,10 @@ export function FriendCard({ data }: { data: any }) {
         
         {/* Avatar de Perfil */}
         <div className="w-22 h-22 sm:w-22 sm:h-22 rounded-full border border-neutral-700 flex-shrink-0 flex items-center justify-center overflow-hidden bg-neutral-800">
-          {data.avatarUrl ? (
+          {image?.link ? (
             <img 
-              src={data.avatarUrl} 
-              alt={data.username} 
+              src={image.link} 
+              alt={userFriend?.username} 
               className="w-full h-full object-cover" 
             />
           ) : (
@@ -32,12 +63,12 @@ export function FriendCard({ data }: { data: any }) {
 
         {/* Informações e Ações */}
         <div className="flex flex-col gap-1">
-          <span className="font-semibold text-zinc-100">@{data.username}</span>
+          <span className="font-semibold text-zinc-100">@{userFriend?.username}</span>
 
           {/* Data de Amizade */}
           <div>
             <p className="text-xs sm:text-sm text-neutral-400">
-              Friends since {data.friendsSince}
+              Friends since {new Date(data.date_start).toLocaleDateString('pt-BR')}
             </p>
           </div>
 
@@ -45,7 +76,7 @@ export function FriendCard({ data }: { data: any }) {
           <div className="flex flex-wrap items-center gap-2 pt-2">
             <Button
               variant="outline"
-              onClick={() => navigate(`/profile/${data.id}`)}
+              onClick={() => navigate(`/profile/${userFriend?.id}`)}
               className="px-4 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg transition-colors border border-zinc-700"
             >
               Visit Profile
@@ -53,7 +84,7 @@ export function FriendCard({ data }: { data: any }) {
 
             <Button
               variant="outline"
-              onClick={() => navigate(`/chat/${data.id}`)}
+              onClick={() => navigate(`/chat/${userFriend?.id}`)}
               className="px-4 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg transition-colors border border-zinc-700"
             >
               Chat
@@ -61,7 +92,7 @@ export function FriendCard({ data }: { data: any }) {
 
             <Button
               variant="outline"
-              onClick={data.onUnfollow}
+              onClick={handleUnfollow}
               className="px-4 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg transition-colors border border-zinc-700 hover:bg-neutral-800 hover:text-red-400 hover:border-red-900/50"
             >
               Unfollow
@@ -73,7 +104,7 @@ export function FriendCard({ data }: { data: any }) {
       </div>
       {/* Badge de Visibilidade */}
       <span className="text-xs text-zinc-400 self-start bg-zinc-800/60 px-2.5 py-1 rounded-full border border-zinc-800">
-        {data.isPrivate ? 'Public Profile' : 'Private Profile'}
+        {userFriend?.public ? 'Public Profile' : 'Private Profile'}
       </span>
     </div>
   );

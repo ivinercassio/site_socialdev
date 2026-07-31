@@ -2,16 +2,25 @@ import { ShowList } from '../components/show-list';
 import { RequestFriendCard } from '../components/request-friend-card';
 import { FriendCard } from '../components/friend-card';
 import { SearchBar } from '../components/search-bar';
+import { getCurrentUser } from '../models/LoginDTO';
+import { getAllFriendsByUserId, type FriendResponse } from '../models/Friend';
+import { useEffect, useState } from 'react';
 
 export function Friends() {
   const requestsData = [
     { id: '1', username: 'john_doe', date: '23/05/2026', isPublic: true },
   ];
 
-  const friendsData = [
-    { id: '2', username: 'alice', friendsSince: '16/04/2026', isPublic: false },
-    { id: '3', username: 'bob', friendsSince: '16/04/2026', isPublic: false },
-  ];
+  const user = getCurrentUser();
+  const [friends, setFriends] = useState<FriendResponse[]>([]);
+  
+    useEffect(() => {
+      async function loadFriends() {
+        const data = await getAllFriendsByUserId(user.id);
+        setFriends(data!);
+      }
+      loadFriends();
+    }, []);
 
   return (
     <div className="bg-neutral-950 text-neutral-100 min-h-screen flex flex-col">
@@ -37,7 +46,7 @@ export function Friends() {
               },
               {
                 title: 'Friends',
-                items: friendsData.map(friend => (
+                items: friends.map(friend => (
                   <FriendCard key={friend.id} data={friend} />
                 )),
               },

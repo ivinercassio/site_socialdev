@@ -1,11 +1,11 @@
 import { Drawer, DrawerContent, DrawerHeader, DrawerFooter, DrawerTrigger, DrawerClose} from "./ui/drawer";
 import { User as UserIcon, Users, Eye, LogOut, Code2, X, HomeIcon } from "lucide-react";
 import image_profile from "../assets/hero.png";
-import type { User } from "../models/User";
+import { chageVisibility, type User } from "../models/User";
 import { useNavigate } from "react-router-dom";
 import { ChangeVisibilityModal } from "./change-visibility-modal";
 import { useState } from "react";
-import { clearUser } from "../models/LoginDTO";
+import { clearUser, getCurrentUser } from "../models/LoginDTO";
 
 interface AppDrawerProps {
   children?: React.ReactNode;
@@ -14,13 +14,14 @@ interface AppDrawerProps {
 export function AppDrawer({ children }: AppDrawerProps) {
   
   const navigate = useNavigate();
-  // Estado local ou vindo de um Context/API da visibilidade do usuário
-  const [isPublicProfile, setIsPublicProfile] = useState(true);
+  const user_data: User = getCurrentUser();
+  const [isPublicProfile, setIsPublicProfile] = useState(user_data.public);
 
-  const handleVisibilityChange = (newVisibility: boolean) => {
-    setIsPublicProfile(newVisibility);
-    // Aqui você pode chamar a sua API/Backend para persistir a alteração
-    console.log("Nova visibilidade salva no servidor:", newVisibility);
+  const handleVisibilityChange = async (newVisibility: boolean) => {
+    // const data = await chageVisibility(user_data.id, newVisibility);
+    // setIsPublicProfile(data!);
+      setIsPublicProfile(newVisibility);
+    // console.log("Nova visibilidade salva no servidor:", data);
   };
 
   function handleLogout () {
@@ -28,13 +29,6 @@ export function AppDrawer({ children }: AppDrawerProps) {
     navigate("/login");
   }
 
-  let user_data: User | null = null;
-  try {
-    const stored = localStorage.getItem("user_data");
-    if (stored) user_data = JSON.parse(stored);
-  } catch {
-    user_data = null;
-  }
 
   return (
     <Drawer direction="left">
@@ -77,7 +71,7 @@ export function AppDrawer({ children }: AppDrawerProps) {
               />
             </div>
             <span className="text-neutral-100 text-base font-semibold tracking-wide">
-              {user_data?.username ? `@${user_data.username}` : "@username"}
+              {user_data?.username}
             </span>
           </DrawerHeader>
 
