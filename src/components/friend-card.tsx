@@ -4,7 +4,7 @@ import type { FriendResponse } from '../models/Friend';
 import { getCurrentUser } from '../models/LoginDTO';
 import { useEffect, useState } from 'react';
 import { getUserById, type User } from '../models/User';
-import type { Midea } from '../models/Midea';
+import { getMideaProfile, getMideaProfileUserById, type Midea } from '../models/Midea';
 
 
 // interface FriendCardProps {
@@ -34,11 +34,11 @@ export function FriendCard({ data }: { data: FriendResponse }) {
 
   useEffect(() => {
     async function loadMideaProfile() {
-      // const data = await getMideaProfile(userFriend.id);
-      // setImage(data!); 
+      const data = await getMideaProfileUserById(userFriend!.id);
+      setImage(data!); 
     }
     loadMideaProfile();
-  }, []);
+  }, [userFriend]);
 
   function handleUnfollow () {
     console.log(`Amizade desfeita com o usuário: ${userFriend?.username}`);

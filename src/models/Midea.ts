@@ -25,7 +25,7 @@ export async function getMideaProfile(id: number): Promise<Midea | null> {
 
 export async function getMideaProfileUserById(id: number): Promise<Midea | null> {
   try {
-      const response = await api.post<Midea>(`mideas/${id}/user`);
+      const response = await api.get<Midea>(`mideas/${id}/user`);
       return response.data; 
   } catch (error) {
       console.error("Falha ao realizar o get da Midea Profile do usuário!", error);

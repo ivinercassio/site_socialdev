@@ -5,8 +5,8 @@ export function Feed({ posts }: { posts: PostResponse[] }) {
   // Caso a lista de posts esteja vazia ou não tenha sido carregada ainda
   if (!Array.isArray(posts) || posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-12 border border-dashed border-black bg-neutral-950 text-neutral-100 font-sans">
-        <p className="text-base font-medium">Nenhum post encontrado no feed.</p>
+      <div className="flex flex-col items-center justify-center p-12 bg-neutral-950 text-neutral-100 font-sans">
+        <p className="text-base font-medium">Nothing posted yet</p>
       </div>
     );
   }

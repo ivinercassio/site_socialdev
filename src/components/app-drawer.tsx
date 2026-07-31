@@ -1,11 +1,11 @@
 import { Drawer, DrawerContent, DrawerHeader, DrawerFooter, DrawerTrigger, DrawerClose} from "./ui/drawer";
-import { User as UserIcon, Users, Eye, LogOut, Code2, X, HomeIcon } from "lucide-react";
-import image_profile from "../assets/hero.png";
+import { User as UserIcon, Users, Eye, LogOut, Code2, X, HomeIcon, AlertCircleIcon } from "lucide-react";
 import { chageVisibility, type User } from "../models/User";
 import { useNavigate } from "react-router-dom";
 import { ChangeVisibilityModal } from "./change-visibility-modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { clearUser, getCurrentUser } from "../models/LoginDTO";
+import { getMideaProfile, type Midea } from "../models/Midea";
 
 interface AppDrawerProps {
   children?: React.ReactNode;
@@ -16,6 +16,7 @@ export function AppDrawer({ children }: AppDrawerProps) {
   const navigate = useNavigate();
   const user_data: User = getCurrentUser();
   const [isPublicProfile, setIsPublicProfile] = useState(user_data.public);
+  const [imageProfile, setImageProfile] = useState<Midea>();
 
   const handleVisibilityChange = async (newVisibility: boolean) => {
     // const data = await chageVisibility(user_data.id, newVisibility);
@@ -29,6 +30,15 @@ export function AppDrawer({ children }: AppDrawerProps) {
     navigate("/login");
   }
 
+  useEffect(() => {
+    async function loadMideaProfile() {
+      const user = getCurrentUser();
+      const data = await getMideaProfile(user.id);
+      setImageProfile(data!); 
+    }
+    loadMideaProfile();
+    }, []);
+
 
   return (
     <Drawer direction="left">
@@ -40,7 +50,7 @@ export function AppDrawer({ children }: AppDrawerProps) {
             className="w-10 h-10 rounded-full border border-neutral-700 overflow-hidden flex items-center justify-center bg-neutral-800 cursor-pointer hover:border-neutral-400 hover:scale-105 transition-all outline-none focus:ring-2 focus:ring-neutral-400"
           >
             <img 
-              src={image_profile} 
+              src={imageProfile?.link} 
               alt="User profile" 
               className="w-full h-full object-cover"
             />
@@ -65,13 +75,13 @@ export function AppDrawer({ children }: AppDrawerProps) {
 
             <div className="w-20 h-20 rounded-full border-2 border-neutral-700 p-0.5 overflow-hidden flex items-center justify-center bg-neutral-800 shadow-md shrink-0">
               <img 
-                src={image_profile} 
+                src={imageProfile?.link} 
                 alt="User profile" 
                 className="w-full h-full object-cover rounded-full"
               />
             </div>
             <span className="text-neutral-100 text-base font-semibold tracking-wide">
-              {user_data?.username}
+              {`@${user_data?.username}`}
             </span>
           </DrawerHeader>
 
@@ -97,16 +107,32 @@ export function AppDrawer({ children }: AppDrawerProps) {
               <span>My Friends</span>
             </button>
 
-            <ChangeVisibilityModal
-              isPublic={isPublicProfile}
-              onConfirm={handleVisibilityChange}
-              trigger={
-                <button className="w-full text-left px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-800 rounded-md flex items-center gap-2">
-                  <Eye className="w-4 h-4" />
-                  <span>Change Visibility</span>
+            {user_data.type === "CLIENT" ? (
+              <ChangeVisibilityModal
+                isPublic={isPublicProfile}
+                onConfirm={handleVisibilityChange}
+                trigger={
+                  <button className="w-full text-left px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-800 rounded-md flex items-center gap-2">
+                    <Eye className="w-4 h-4" />
+                    <span>Change Visibility</span>
+                  </button>
+                }
+              />
+            ) : (
+              <div>
+                <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-neutral-200 hover:text-white hover:bg-neutral-800 transition-all font-medium"
+                onClick={() => navigate("/reports")}>
+                  <AlertCircleIcon className="w-4 h-4 text-neutral-400" />
+                  <span>See Reports</span>
                 </button>
-              }
-            />
+
+                <button className="w-full h-11 px-4 flex items-center justify-start gap-3 rounded-xl text-neutral-200 hover:text-white hover:bg-neutral-800 transition-all font-medium"
+                disabled={true}>
+                  <Eye className="w-4 h-4 text-neutral-400" />
+                  <span>Visibility: Private</span>
+                </button>
+              </div>
+            )}
           </nav>
         </div>
 

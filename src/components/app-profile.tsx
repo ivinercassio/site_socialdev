@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Midea } from "../models/Midea";
+import { getMideaProfile, getMideaProfileUserById, type Midea } from "../models/Midea";
 import { getUserById, type User } from "../models/User";
 import { getAllFriendsByUserId, } from "../models/Friend";
 import { useParams } from "react-router-dom";
@@ -13,8 +13,13 @@ export function AppProfile() {
   
   useEffect(() => {
     async function loadMideaProfile() {
-      // const data = await getMideaProfile(post.author.id);
-      // setImageUser(data!); 
+      if (!id) {
+        const data = await getMideaProfile(Number(id));
+        setImageUser(data!); 
+      } else {
+        const data = await getMideaProfileUserById(Number(id));
+        setImageUser(data!); 
+      }
     }
     loadMideaProfile();
   }, []);
@@ -68,7 +73,7 @@ export function AppProfile() {
           
           {/* Username: Alterado para branco puro */}
           <span className="text-base font-medium tracking-wide text-white">
-            {user?.username}
+            @{user?.username}
           </span>
         </div>
 

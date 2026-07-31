@@ -1,7 +1,7 @@
 import { Heart, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ReportModal } from './report-modal';
-import type { PostResponse } from '../models/Post';
+import { markPostAsLiked, type PostResponse } from '../models/Post';
 import { getAllMideasByPostId, getMideaProfileUserById } from '../models/Midea';
 import { useEffect, useState } from 'react';
 import type { Midea } from '../models/Midea';
@@ -10,34 +10,45 @@ import { getAllTagsByPostId } from '../models/PostTag';
 
 export function PostCard({ post }: { post: PostResponse }) {
 
+  const navigate = useNavigate();
   const [imageUser, setImageUser] = useState<Midea>();
   const [imagesPost, setImagesPost] = useState<Midea[]>([]);
   const [tagsPost, setTagsPost] = useState<Tag[]>([]);
-  const navigate = useNavigate();
+  const [liked, setLiked] = useState<boolean>(false);
+
+  const handleLike = async () => {
+    let cont = 0;
+    (liked) ? cont = 1 : cont = 2;
+    const data = await markPostAsLiked(post.id, cont);
+    if (data) {
+      setLiked(!liked);
+      post.like += cont;
+    }
+  };
   
-    useEffect(() => {
-      async function loadProfileById() {
-        // const data = await getMideaProfileUserById(post.author.id);
-        // setImageUser(data!); 
-      }
-      loadProfileById();
-    }, []);
+  useEffect(() => {
+    async function loadProfileById() {
+      const data = await getMideaProfileUserById(post.author);
+      setImageUser(data!); 
+    }
+    loadProfileById();
+  }, []);
 
-    useEffect(() => {
-      async function loadMidasPost() {
-        const data = await getAllMideasByPostId(post.id);
-        setImagesPost(data!); 
-      }
-      loadMidasPost();
-    }, []);
+  useEffect(() => {
+    async function loadMidasPost() {
+      const data = await getAllMideasByPostId(post.id);
+      setImagesPost(data!); 
+    }
+    loadMidasPost();
+  }, []);
 
-    useEffect(() => {
-      async function loadTagsPost() {
-        const data = await getAllTagsByPostId(post.id);
-        setTagsPost(data!); 
-      }
-      loadTagsPost();
-    }, []);
+  useEffect(() => {
+    async function loadTagsPost() {
+      const data = await getAllTagsByPostId(post.id);
+      setTagsPost(data!); 
+    }
+    loadTagsPost();
+  }, []);
 
   return (
     <article className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-2xl font-sans text-sm overflow-hidden shadow-xl">
@@ -54,15 +65,16 @@ export function PostCard({ post }: { post: PostResponse }) {
             )}
           </div>
           {/* @username */}
-          <span className="font-semibold text-neutral-100">
-            @{post.author_username || 'username'}
+          <span className="font-semibold text-neutral-100"
+          onClick={() => navigate(`/profile/${post.author}`)}>
+            @{post.author_username}
           </span>
         </div>
 
         <div className="flex items-center gap-4">
           {/* Data de Publicação */}
           <time className="text-neutral-400 text-xs">
-            {new Date(post.date_published).toLocaleDateString('pt-BR') || '15/07/2026'}
+            {new Date(post.date_published).toLocaleDateString('pt-BR')}
           </time>
           {/* Botão + Follow - Estilo Dark Button */}
           <button className="px-4 py-1.5 rounded-full font-semibold bg-neutral-100 text-neutral-950 hover:bg-neutral-300 transition-colors">
@@ -74,8 +86,13 @@ export function PostCard({ post }: { post: PostResponse }) {
       {/* 2. Corpo do Post (Legenda e Mídia) */}
       <div className="px-4 pb-4 flex flex-col gap-4">
         {/* Legenda */}
+        <p className="text-neutral-100 break-words font-bold leading-relaxed">
+          {post.title}
+        </p>
+
+        {/* Legenda */}
         <p className="text-neutral-100 break-words leading-relaxed">
-          {post.legend || 'Legend...Legend...Legend....Legend...'}
+          {post.legend}
         </p>
 
         {/* Container de Imagem / Vídeo - Arredondado e Escuro */}
@@ -99,10 +116,17 @@ export function PostCard({ post }: { post: PostResponse }) {
         {/* Lado Esquerdo: Likes, Comentários e Tags */}
         <div className="flex items-center gap-5 text-neutral-100">
           {/* Likes */}
-          <button className="flex items-center gap-1.5 hover:text-red-400 transition-colors group">
-            <Heart className="w-5 h-5 stroke-[1.5] group-hover:fill-red-400 transition-colors" />
+          {liked ? 
+          <button className="flex items-center gap-1.5 text-red-400 transition-colors group"
+          onClick={handleLike}>
+            <Heart className="w-5 h-5 stroke-[1.5] fill-red-400 transition-colors" />
             <span className="font-medium">{post.like ?? 250}</span>
           </button>
+          : <button className="flex items-center gap-1.5 hover:text-red-400 transition-colors group"
+          onClick={handleLike}>
+            <Heart className="w-5 h-5 stroke-[1.5] group-hover:fill-red-400 transition-colors" />
+            <span className="font-medium">{post.like ?? 250}</span>
+          </button>}
 
           {/* Comentários */}
           <button className="flex items-center gap-1.5 hover:text-blue-400 transition-colors"

@@ -16,7 +16,7 @@ export default function Login() {
     console.log(user);
   
     if (user) {
-      // getMideaProfile(user.user.id);
+      getMideaProfile(user.user.id);
       navigate("/home");
     } else {
       console.error("Erro ao fazer login. Verifique as credenciais.");

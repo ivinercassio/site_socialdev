@@ -14,7 +14,7 @@ export interface PostResponse {
     id: number;
     title: string;
     legend: string;
-    author: User;
+    author: number;
     author_username: string;
     like: number;
     date_published: Date;
@@ -22,7 +22,7 @@ export interface PostResponse {
 
 export async function getAllPostsByUserId(id: number): Promise<PostResponse[] | null> {
   try {
-    const response = await api.get<PostResponse[]>(`posts/${id}`);
+    const response = await api.get<PostResponse[]>(`posts/${id}/user`);
     return response.data; 
   } catch (error) {
     console.error("Falha ao realizar get dos Posts!", error);
@@ -36,6 +36,16 @@ export async function getAllPosts(): Promise<PostResponse[] | null> {
     return response.data; 
   } catch (error) {
     console.error("Falha ao realizar get dos Posts!", error);
+    return null;
+  }
+}
+
+export async function markPostAsLiked(id:number, cont:number, ) {
+  try {
+    const response = await api.put<PostResponse[]>(`posts/${id}/`, {like: cont});
+    return response.data; 
+  } catch (error) {
+    console.error("Falha ao atualizar o contado de likes Post!", error);
     return null;
   }
 }
