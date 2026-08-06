@@ -19,7 +19,7 @@ export interface FriendResponse {
 
 export async function getAllFriendsByUserId(id:number) : Promise<FriendResponse[] | null> {
   try {
-    const response = await api.get<FriendResponse[]>(`friends/${id}/user`);
+    const response = await api.get<FriendResponse[]>(`friends/${id}/user/`);
     return response.data; 
   } catch (error) {
     console.error("Falha ao realizar get dos amigos do usuário!", error);

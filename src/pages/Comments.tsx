@@ -1,9 +1,22 @@
+import { useEffect, useState } from "react";
 import { CommentCard } from "../components/commet-card";
 import { PostCard } from "../components/post-card";
 import { SearchBar } from "../components/search-bar";
 import { ShowList } from "../components/show-list";
+import { useParams } from "react-router-dom";
+import { getAllCommentsPostById, type CommentResponse } from "../models/Comment";
 
 export function Comments() {
+  const { id } = useParams();
+  const [comments, setComments] = useState<CommentResponse[]>();
+
+  useEffect(() => {
+    async function loadComments() {
+      const response = await getAllCommentsPostById(id!);
+      setComments(response!);
+    } 
+    loadComments();
+  }, [id])
   const commentsData = [
     {
       id: 'c1',
@@ -66,7 +79,7 @@ export function Comments() {
               },
               {
                 title: 'Comments',
-                items: commentsData.map(comment => (
+                items: comments.map(comment => (
                   <CommentCard key={comment.id} data={comment} />
                 )),
               },

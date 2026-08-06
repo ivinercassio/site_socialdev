@@ -15,12 +15,10 @@ export function ShowList({ sections }: ShowListProps) {
       {sections.map((section, sectionIndex) => (
         <div key={sectionIndex} className="flex flex-col gap-4">
           
-          {/* Subtítulo da Seção */}
           <h2 className="text-xl font-semibold text-zinc-200 tracking-wide -my-2">
             {section.title}
           </h2>
 
-          {/* Lista de Cards */}
           <div className="flex flex-col gap-4">
             {section.items.map((item, itemIndex) => (
               <React.Fragment key={itemIndex}>

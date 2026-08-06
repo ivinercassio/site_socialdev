@@ -3,12 +3,13 @@ import { getMideaProfile, getMideaProfileUserById, type Midea } from "../models/
 import { getUserById, type User } from "../models/User";
 import { getAllFriendsByUserId, } from "../models/Friend";
 import { useParams } from "react-router-dom";
-import { getCurrentUser } from "../models/LoginDTO";
+import { useUser } from "../contexts/UserContext";
 
 export function AppProfile() {
+  const { user } = useUser();
   const { id } = useParams();
   const [imageUser, setImageUser] = useState<Midea>();
-  const [user, setUser] = useState<User>();
+  const [otherUser, setOtherUser] = useState<User>();
   const [friends, setFriends] = useState<number>();
   
   useEffect(() => {
@@ -26,11 +27,9 @@ export function AppProfile() {
   
   useEffect(() => {
     async function loadUserData() {
-      if (!id) 
-        setUser(getCurrentUser());
-      else {
+      if (id) {
         const data = await getUserById(Number(id));
-        setUser(data!);
+        setOtherUser(data!);
       }
     }
     loadUserData();
@@ -39,9 +38,8 @@ export function AppProfile() {
   useEffect(() => {
     async function loadFriends() {
       let param = Number(id);
-      if (!id) {
-        const user = getCurrentUser();
-        param = user.id;
+      if (id == undefined) {
+        param = user!.id;
       } 
       const data = await getAllFriendsByUserId(param);
       setFriends(data!.length);
@@ -62,7 +60,7 @@ export function AppProfile() {
             {imageUser?.link ? (
               <img 
                 src={imageUser.link} 
-                alt={user?.username} 
+                alt={id ? otherUser?.username : user?.username} 
                 className="w-full h-full object-cover" 
               />
             ) : (
@@ -73,7 +71,7 @@ export function AppProfile() {
           
           {/* Username: Alterado para branco puro */}
           <span className="text-base font-medium tracking-wide text-white">
-            @{user?.username}
+            @{id ? otherUser?.username : user?.username}
           </span>
         </div>
 
@@ -86,7 +84,7 @@ export function AppProfile() {
             <h3 className="text-base font-semibold text-white">About</h3>
             {/* Texto: Alterado para cinza claro */}
             <p className="text-sm tracking-wide leading-relaxed uppercase break-words text-neutral-300">
-              {user?.about}
+              {id ? otherUser?.about : user?.about}
             </p>
           </div>
 
@@ -99,9 +97,9 @@ export function AppProfile() {
 
           {/* Rodapé: Status do Perfil e Data: Texto para cinza claro */}
           <div className="text-xs pt-2 text-neutral-400 flex items-center gap-2">
-            <span>{user?.public ? 'Public Profile' : 'Private Profile'}</span>
+            <span>{id ? (otherUser?.public ? 'Public Profile' : 'Private Profile') : (user?.public ? 'Public Profile' : 'Private Profile')}</span>
             <span className="text-neutral-600">|</span>
-            <span>Joined us at {new Date(user?.creation_date!).toLocaleDateString('pt-BR')}</span>
+            <span>Joined us at {id ? new Date(otherUser?.creation_date!).toLocaleDateString('pt-BR') : new Date(user?.creation_date!).toLocaleDateString('pt-BR')}</span>
           </div>
 
         </div>

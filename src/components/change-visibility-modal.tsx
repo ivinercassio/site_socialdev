@@ -6,25 +6,29 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "../components/ui/drawer"
 import { useState } from "react"
 import { useMediaQuery } from "../hooks/use-mobile"
+import { Input } from "./ui/input"
+import { Label } from "./ui/label"
 
 interface ChangeVisibilityModalProps {
   isPublic?: boolean
-  onConfirm?: (newVisibility: boolean) => void
-  trigger?: React.ReactNode // Permite passar um botão/item customizado
+  onConfirm?: (newVisibility: boolean, password: string) => void
+  trigger?: React.ReactNode 
 }
 
 export function ChangeVisibilityModal({
-  isPublic = true,
+  isPublic,
   onConfirm,
   trigger,
 }: ChangeVisibilityModalProps) {
   const [open, setOpen] = useState(false)
+  const [password, setPassword] = useState("")
   const isDesktop = useMediaQuery("(min-width: 768px)")
 
   const handleConfirm = () => {
     if (onConfirm) {
-      onConfirm(!isPublic)
+      onConfirm(!isPublic, password)
     }
+    setPassword("")
     setOpen(false)
   }
 
@@ -45,9 +49,14 @@ export function ChangeVisibilityModal({
             </DialogTitle>
             <DialogDescription className="pt-2 text-neutral-400 text-sm leading-relaxed">
               {isPublic
-                ? "You sure that wanto to change your visibility profile? If you active private profile, just who is your friend can see you."
-                : "You sure that want to change your visibility profile? If you desactivite private profile, all users will can see your profile."}
+                ? "You sure that want to change profile visibility? If you active private profile, just who is your friend can see you."
+                : "You sure that want to change profile visibility? If you desactivite private profile, all users can see your profile."}
             </DialogDescription>
+            <div className="flex flex-col gap-2 pt-4">
+              <Label htmlFor="password">Confirm typing your password:</Label>
+              <Input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                className="bg-neutral-900 border-neutral-700 text-white" />
+            </div>
           </DialogHeader>
           <VisibilityActions onConfirm={handleConfirm} onCancel={() => setOpen(false)} />
         </DialogContent>
@@ -71,9 +80,14 @@ export function ChangeVisibilityModal({
           </DrawerTitle>
           <DrawerDescription className="pt-2 text-neutral-400 text-sm leading-relaxed">
             {isPublic
-              ? "You sure that wanto to change your visibility profile? If you active private profile, just who is your friend can see you."
-              : "You sure that want to change your visibility profile? If you desactivite private profile, all users will can see your profile."}
+              ? "You sure that want to change profile visibility? If you active private profile, just who is your friend can see you."
+                : "You sure that want to change profile visibility? If you desactivite private profile, all users can see your profile."}
           </DrawerDescription>
+          <div className="flex flex-col gap-2 pt-4">
+              <Label htmlFor="password">Confirm typing your password:</Label>
+              <Input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                className="bg-neutral-900 border-neutral-700 text-white" />
+            </div>
         </DrawerHeader>
         <DrawerFooter className="pt-2 flex flex-col gap-2">
           <Button 

@@ -25,7 +25,7 @@ export async function getMideaProfile(id: number): Promise<Midea | null> {
 
 export async function getMideaProfileUserById(id: number): Promise<Midea | null> {
   try {
-      const response = await api.get<Midea>(`mideas/${id}/user`);
+      const response = await api.get<Midea>(`mideas/${id}/user/`);
       return response.data; 
   } catch (error) {
       console.error("Falha ao realizar o get da Midea Profile do usuário!", error);
@@ -35,7 +35,7 @@ export async function getMideaProfileUserById(id: number): Promise<Midea | null>
 
 export async function getAllMideasByPostId(id:number): Promise<Midea[] | null> {
     try {
-    const response = await api.get<Midea[]>(`mideas/${id}/post`);
+    const response = await api.get<Midea[]>(`mideas/${id}/post/`);
     return response.data; 
   } catch (error) {
     console.error(`Falha ao realizar get das Mideas do Post #${id}!`, error);

@@ -4,9 +4,10 @@ import { AppProfile } from "../components/app-profile";
 import { useParams } from "react-router-dom";
 import { getAllPostsByUserId, type PostResponse } from "../models/Post";
 import { useEffect, useState } from "react";
-import { getCurrentUser } from "../models/LoginDTO";
+import { useUser } from "../contexts/UserContext";
 
 export default function Profile () {
+  const { user } = useUser();
   const { id } = useParams();
   const [posts, setPosts] = useState<PostResponse[]>([]);
   
@@ -14,8 +15,7 @@ export default function Profile () {
     async function loadPosts() {
       let param = Number(id);
       if (!id) {
-        const user = getCurrentUser();
-        param = user?.id; 
+        param = user!.id; 
       } 
       
       const data = await getAllPostsByUserId(param);

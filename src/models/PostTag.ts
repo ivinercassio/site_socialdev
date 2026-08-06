@@ -10,7 +10,7 @@ export interface PostTag {
 
 export async function getAllTagsByPostId(id: number): Promise<Tag[] | null> {
   try {
-    const response = await api.get<Tag[]>(`post_tags/${id}/post`);
+    const response = await api.get<Tag[]>(`post_tags/${id}/post/`);
     return response.data; 
   } catch (error) {
     console.error(`Falha ao realizar get das Tags do Post #${id}!`, error);

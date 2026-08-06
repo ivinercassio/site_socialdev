@@ -22,7 +22,7 @@ export interface PostResponse {
 
 export async function getAllPostsByUserId(id: number): Promise<PostResponse[] | null> {
   try {
-    const response = await api.get<PostResponse[]>(`posts/${id}/user`);
+    const response = await api.get<PostResponse[]>(`posts/${id}/user/`);
     return response.data; 
   } catch (error) {
     console.error("Falha ao realizar get dos Posts!", error);
