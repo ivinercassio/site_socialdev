@@ -33,12 +33,16 @@ export function clearUser() {
   localStorage.clear();
 }
 
+export function updateLocalStorageUser(updatedUser: User) {
+  localStorage.setItem("user", JSON.stringify(updatedUser));
+}
+
 export function getCurrentUser(): User | null {
-  const userStr = localStorage.getItem("user");
-  if (!userStr) return null;
+  const userJson = localStorage.getItem("user");
+  if (!userJson) return null;
   try {
-    return JSON.parse(userStr);
-  } catch {
+    return JSON.parse(userJson) as User;
+  } catch (error) {
     return null;
   }
 }

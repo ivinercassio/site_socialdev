@@ -1,17 +1,11 @@
+import type { CommentResponse } from "../models/Comment";
 import { ReportModal } from "./report-modal";
 
-export interface CommentData {
-  id: string;
-  username: string;
-  content: string;
-  avatarUrl?: string;
+interface CommentProps {
+  data: CommentResponse
 }
 
-interface CommentCardProps {
-  data: CommentData;
-}
-
-export function CommentCard({ data }: CommentCardProps) {
+export function CommentCard( {data}: CommentProps) {
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-start gap-4 shadow-lg transition-colors hover:border-zinc-700">
       {/* Avatar / Foto de Perfil */}
@@ -19,7 +13,7 @@ export function CommentCard({ data }: CommentCardProps) {
         {data.avatarUrl ? (
           <img 
             src={data.avatarUrl} 
-            alt={data.username} 
+            alt={data.owner_username} 
             className="w-full h-full object-cover" 
           />
         ) : (
@@ -30,10 +24,10 @@ export function CommentCard({ data }: CommentCardProps) {
       {/* Conteúdo do Comentário */}
       <div className="flex flex-col gap-1 flex-1">
         <span className="font-semibold text-sm text-zinc-100 hover:underline cursor-pointer">
-          @{data.username}
+          @{data.owner_username}
         </span>
         <p className="text-sm text-zinc-300 leading-relaxed break-words">
-          {data.content}
+          {data.text}
         </p>
       </div>
 

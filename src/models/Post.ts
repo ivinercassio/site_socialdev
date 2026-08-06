@@ -40,6 +40,16 @@ export async function getAllPosts(): Promise<PostResponse[] | null> {
   }
 }
 
+export async function getPostById(id: number | string): Promise<PostResponse | null> {
+  try {
+    const response = await api.get<PostResponse>(`posts/${id}/`);
+    return response.data; 
+  } catch (error) {
+    console.error("Falha ao realizar get do Post pelo id!", error);
+    return null;
+  }
+}
+
 export async function markPostAsLiked(id:number, cont:number, ) {
   try {
     const response = await api.put<PostResponse[]>(`posts/${id}/`, {like: cont});

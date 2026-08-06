@@ -16,20 +16,14 @@ export function AppDrawer({ children }: AppDrawerProps) {
   const { user, updateUserVisibility, logout } = useUser(); 
   const [imageProfile, setImageProfile] = useState<Midea>();
 
-<<<<<<< HEAD
-  const handleVisibilityChange = async (newVisibility: boolean) => {
-    if (!user) return;
-    const updatedVisibility = await chageVisibility(user.id, newVisibility);
-    if (updatedVisibility !== undefined) {
-      updateUserVisibility(updatedVisibility!);
-    }
-=======
   const handleVisibilityChange = async (newVisibility: boolean, password: string) => {
-    const visible = await chageVisibility(user_data,  newVisibility, password);
-    setIsPublicProfile(visible!);
-    setIsPublicProfile(newVisibility);
-    console.log("Nova visibilidade salva no servidor:", visible);
->>>>>>> 5df45e26ec9623212b7dddd6d651e38a041e3f3d
+    const updatedUser = await chageVisibility(user!, newVisibility, password);
+    if (updatedUser) {
+      updateUserVisibility(updatedUser);
+      console.log("Visibilidade atualizada globalmente para:", updatedUser.public);
+    } else {
+      console.error("Não foi possível atualizar: a API não retornou o usuário.");
+    }
   };
 
   function handleLogout() {
@@ -53,13 +47,8 @@ export function AppDrawer({ children }: AppDrawerProps) {
     <Drawer direction="left">
       <DrawerTrigger asChild>
         {children || (
-<<<<<<< HEAD
-          <button
-            title="Abrir Menu"
-=======
           <button 
             title="Open Menu"
->>>>>>> 5df45e26ec9623212b7dddd6d651e38a041e3f3d
             className="w-10 h-10 rounded-full border border-neutral-700 overflow-hidden flex items-center justify-center bg-neutral-800 cursor-pointer hover:border-neutral-400 hover:scale-105 transition-all outline-none focus:ring-2 focus:ring-neutral-400"
           >
             <img

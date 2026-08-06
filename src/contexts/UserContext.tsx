@@ -1,12 +1,12 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { type User } from "../models/User";
-import { getCurrentUser, clearUser, doLogin, type LoginRequest } from "../models/LoginDTO";
+import { getCurrentUser, clearUser, doLogin, type LoginRequest, updateLocalStorageUser } from "../models/LoginDTO";
 
 interface UserContextType {
   user: User | null;
-  login: (credentials: LoginRequest) => Promise<boolean>;
+  login: (credentials: LoginRequest) => Promise<User | null>;
   logout: () => void;
-  updateUserVisibility: (newVisibility: boolean) => void;
+  updateUserVisibility: (updateUser: User) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -25,9 +25,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const response = await doLogin(credentials);
     if (response) {
       setUser(response.user);
-      return true;
+      return response.user;
     }
-    return false;
+    return null;
   };
 
   const logout = () => {
@@ -35,13 +35,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  // Função para atualizar a visibilidade reativamente
-  const updateUserVisibility = (newVisibility: boolean) => {
-    if (user) {
-      const updatedUser = { ...user, isPublic: newVisibility };
-      setUser(updatedUser);
-      localStorage.setItem("user", JSON.stringify(updatedUser)); 
-    }
+  const updateUserVisibility = (updatedUser: User) => {
+    setUser(updatedUser);
+    updateLocalStorageUser(updatedUser);
+    console.log("LocalStorage e Context sincronizados com sucesso para public:", updatedUser.public);
   };
 
   return (

@@ -1,4 +1,4 @@
-import { CommentCard } from "../components/commet-card";
+import { CommentCard } from "../components/comment-card";
 import { PostCard } from "../components/post-card";
 import { SearchBar } from "../components/search-bar";
 import { ShowList } from "../components/show-list";

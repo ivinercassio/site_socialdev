@@ -21,14 +21,14 @@ export async function getUserById(id: number): Promise<User | null >{
   }
 }
 
-export async function chageVisibility(user: User, visible: boolean, password: string): Promise<boolean | null >{
+export async function chageVisibility(user: User, visible: boolean, password: string): Promise<User | null >{
   try {
     const objeto: LoginRequest = { username: user.username, password: password };
     const authenticated = doLogin(objeto);
     if (authenticated !== null) {
       const update = { public: visible };
       const response = await api.patch<User>(`users/${user.id}/`, update);
-      return response.data.public; 
+      return response.data; 
     }
     return null;
   } catch (error) {

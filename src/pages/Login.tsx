@@ -5,7 +5,7 @@ import { getMideaProfile } from '../models/Midea';
 import { useUser } from '../contexts/UserContext';
 
 export default function Login() {
-  const { login, user } = useUser();
+  const { login } = useUser();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export default function Login() {
     const saved = await login(data);
   
     if (saved) {
-      getMideaProfile(user!.id);
+      getMideaProfile(saved.id);
       navigate("/home");
     } else {
       console.error("Erro ao fazer login. Verifique as credenciais.");

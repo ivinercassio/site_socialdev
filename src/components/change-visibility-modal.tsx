@@ -3,7 +3,7 @@
 import { cn } from "../lib/utils"
 import { Button } from "../components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "../components/ui/dialog"
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "../components/ui/drawer"
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../components/ui/drawer" 
 import { useState } from "react"
 import { useMediaQuery } from "../hooks/use-mobile"
 import { Input } from "./ui/input"
@@ -36,11 +36,11 @@ export function ChangeVisibilityModal({
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         { trigger ? (
-        <DialogTrigger asChild>{trigger}</DialogTrigger>
+          <DialogTrigger asChild>{trigger}</DialogTrigger>
         ) : (
-            <DialogTrigger asChild>
+          <DialogTrigger asChild>
             <Button variant="outline">Change Visibility</Button>
-            </DialogTrigger>
+          </DialogTrigger>
         ) }
         <DialogContent className="sm:max-w-[425px] bg-neutral-800 border-neutral-800 text-white">
           <DialogHeader>
@@ -67,12 +67,12 @@ export function ChangeVisibilityModal({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       { trigger ? (
-        <DialogTrigger asChild>{trigger}</DialogTrigger>
-        ) : (
-            <DialogTrigger asChild>
-            <Button variant="outline">Change Visibility</Button>
-            </DialogTrigger>
-        ) }
+        <DrawerTrigger asChild>{trigger}</DrawerTrigger> 
+      ) : (
+        <DrawerTrigger asChild> 
+          <Button variant="outline">Change Visibility</Button>
+        </DrawerTrigger>
+      ) }
       <DrawerContent className="bg-neutral-800 border-neutral-800 text-white">
         <DrawerHeader className="text-left">
           <DrawerTitle className="text-white text-lg font-semibold">
@@ -81,13 +81,13 @@ export function ChangeVisibilityModal({
           <DrawerDescription className="pt-2 text-neutral-400 text-sm leading-relaxed">
             {isPublic
               ? "You sure that want to change profile visibility? If you active private profile, just who is your friend can see you."
-                : "You sure that want to change profile visibility? If you desactivite private profile, all users can see your profile."}
+              : "You sure that want to change profile visibility? If you desactivite private profile, all users can see your profile."}
           </DrawerDescription>
           <div className="flex flex-col gap-2 pt-4">
-              <Label htmlFor="password">Confirm typing your password:</Label>
-              <Input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                className="bg-neutral-900 border-neutral-700 text-white" />
-            </div>
+            <Label htmlFor="password">Confirm typing your password:</Label>
+            <Input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}
+              className="bg-neutral-900 border-neutral-700 text-white" />
+          </div>
         </DrawerHeader>
         <DrawerFooter className="pt-2 flex flex-col gap-2">
           <Button 
