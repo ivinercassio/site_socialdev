@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import type { CommentResponse } from "../models/Comment";
+import { getMideaProfileUserById, type Midea } from "../models/Midea";
 import { ReportModal } from "./report-modal";
 
 interface CommentProps {
@@ -6,13 +8,23 @@ interface CommentProps {
 }
 
 export function CommentCard( {data}: CommentProps) {
+  const [mideaProfile, setMideaProfile] = useState<Midea | null>();
+
+  useEffect(() => {
+    async function loadMidea() {
+      const response = await getMideaProfileUserById(data.owner);
+      setMideaProfile(response);
+    }
+    loadMidea()
+  }, []);
+
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-start gap-4 shadow-lg transition-colors hover:border-zinc-700">
       {/* Avatar / Foto de Perfil */}
       <div className="w-12 h-12 rounded-full bg-zinc-800 border border-zinc-700 flex-shrink-0 flex items-center justify-center text-[10px] text-zinc-400 overflow-hidden">
-        {data.avatarUrl ? (
+        {mideaProfile?.link ? (
           <img 
-            src={data.avatarUrl} 
+            src={mideaProfile.link} 
             alt={data.owner_username} 
             className="w-full h-full object-cover" 
           />

@@ -14,7 +14,7 @@ export function SearchBar() {
       {user !== null ? <AppDrawer /> : <div></div>}
 
       {/* 2. Input de Pesquisa */}
-      <div className="flex-grow max-w-2xl relative flex items-center">
+      <div className={`flex-grow max-w-2xl relative flex items-center ${user == null ? "ml-18": "mr-10"}`}>
         <Search className="w-4 h-4 absolute left-3.5 text-neutral-400 pointer-events-none" />
         <input 
           type="text" 
