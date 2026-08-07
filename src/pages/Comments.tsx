@@ -4,7 +4,7 @@ import { PostCard } from "../components/post-card";
 import { SearchBar } from "../components/search-bar";
 import { ShowList } from "../components/show-list";
 import { useParams } from "react-router-dom";
-import { getAllCommentsPostById, type CommentResponse } from "../models/Comment";
+import { getAllCommentsByPostId, type CommentResponse } from "../models/Comment";
 import { getPostById, type PostResponse } from "../models/Post";
 
 export function Comments() {
@@ -14,7 +14,7 @@ export function Comments() {
 
   useEffect(() => {
     async function loadComments() {
-      const response = await getAllCommentsPostById(id!);
+      const response = await getAllCommentsByPostId(id!);
       setComments(response!);
       const getPost = await getPostById(id!);
       let array: PostResponse[] = [];
@@ -23,19 +23,6 @@ export function Comments() {
     } 
     loadComments();
   }, [id]);
-  
-  //  const commentsData = [
-  //   {
-  //     id: 'c1',
-  //     username: 'carol_v',
-  //     content: 'Comment... Comment... Comment... Comment... Comment... Comment... Comment... Comment....',
-  //   },
-  //   {
-  //     id: 'c2',
-  //     username: 'dev_marcos',
-  //     content: 'Excelente projeto! O layout e a arquitetura dos componentes ficaram sensacionais.',
-  //   },
-  // ];
 
   return (
     <div className="bg-neutral-950 text-neutral-100 min-h-screen flex flex-col">

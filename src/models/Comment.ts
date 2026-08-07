@@ -20,7 +20,7 @@ export interface CommentResponse {
     date_published: Date;
 }
 
-export async function getAllCommentsPostById(id: number | string): Promise<CommentResponse[] | null> {
+export async function getAllCommentsByPostId(id: number | string): Promise<CommentResponse[] | null> {
   try {
     const response = await api.get<CommentResponse[]>(`comments/${id}/post/`);
     return response.data; 

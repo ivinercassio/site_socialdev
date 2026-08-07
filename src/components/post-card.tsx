@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import type { Midea } from '../models/Midea';
 import type { Tag } from '../models/Tag';
 import { getAllTagsByPostId } from '../models/PostTag';
+import { getAllCommentsByPostId, type CommentResponse } from '../models/Comment';
 
 export function PostCard({ post }: { post: PostResponse }) {
 
@@ -14,6 +15,7 @@ export function PostCard({ post }: { post: PostResponse }) {
   const [imageUser, setImageUser] = useState<Midea>();
   const [imagesPost, setImagesPost] = useState<Midea[]>([]);
   const [tagsPost, setTagsPost] = useState<Tag[]>([]);
+  const [comments, setComments] = useState<CommentResponse[]>([]);
   const [liked, setLiked] = useState<boolean>(false);
 
   const handleLike = async () => {
@@ -27,27 +29,17 @@ export function PostCard({ post }: { post: PostResponse }) {
   };
   
   useEffect(() => {
-    async function loadProfileById() {
-      const data = await getMideaProfileUserById(post.author);
-      setImageUser(data!); 
+    async function loadData() {
+      const getProfile = await getMideaProfileUserById(post.author);
+      setImageUser(getProfile!); 
+      const getMideas = await getAllMideasByPostId(post.id);
+      setImagesPost(getMideas!); 
+      const getTags = await getAllTagsByPostId(post.id);
+      setTagsPost(getTags!); 
+      const getComments = await getAllCommentsByPostId(post.id);
+      setComments(getComments!);
     }
-    loadProfileById();
-  }, []);
-
-  useEffect(() => {
-    async function loadMidasPost() {
-      const data = await getAllMideasByPostId(post.id);
-      setImagesPost(data!); 
-    }
-    loadMidasPost();
-  }, []);
-
-  useEffect(() => {
-    async function loadTagsPost() {
-      const data = await getAllTagsByPostId(post.id);
-      setTagsPost(data!); 
-    }
-    loadTagsPost();
+    loadData();
   }, []);
 
   return (
@@ -120,19 +112,19 @@ export function PostCard({ post }: { post: PostResponse }) {
           <button className="flex items-center gap-1.5 text-red-400 transition-colors group"
           onClick={handleLike}>
             <Heart className="w-5 h-5 stroke-[1.5] fill-red-400 transition-colors" />
-            <span className="font-medium">{post.like ?? 250}</span>
+            <span className="font-medium">{post.like}</span>
           </button>
           : <button className="flex items-center gap-1.5 hover:text-red-400 transition-colors group"
           onClick={handleLike}>
             <Heart className="w-5 h-5 stroke-[1.5] group-hover:fill-red-400 transition-colors" />
-            <span className="font-medium">{post.like ?? 250}</span>
+            <span className="font-medium">{post.like}</span>
           </button>}
 
           {/* Comentários */}
           <button className="flex items-center gap-1.5 hover:text-blue-400 transition-colors"
           onClick={() => navigate(`/comments/${post.id}`)}>
             <MessageCircle className="w-5 h-5 stroke-[1.5]" />
-            {/* <span className="font-medium">{postdata?.commentsCount ?? 12}</span> */}
+            <span className="font-medium">{comments.length}</span>
           </button>
 
           {/* Hashtag */}
