@@ -1,7 +1,7 @@
 import { Heart, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ReportModal } from './report-modal';
-import { markPostAsLiked, type PostResponse } from '../models/Post';
+import { likePost, unlikePost, type PostResponse } from '../models/Post';
 import { getAllMideasByPostId, getMideaProfileUserById } from '../models/Midea';
 import { useEffect, useState } from 'react';
 import type { Midea } from '../models/Midea';
@@ -20,12 +20,12 @@ export function PostCard({ post }: { post: PostResponse }) {
   const [liked, setLiked] = useState<boolean>(false);
 
   const handleLike = async () => {
-    let cont = 0;
-    (liked) ? cont = 1 : cont = 2;
-    const data = await markPostAsLiked(post.id, cont);
-    if (data) {
-      setLiked(!liked);
-      post.like += cont;
+    if (!liked) {
+      await likePost(post.id);
+      setLiked(true);
+    } else {
+      await unlikePost(post.id);
+      setLiked(false);
     }
   };
   
@@ -122,7 +122,7 @@ export function PostCard({ post }: { post: PostResponse }) {
           <button className="flex items-center gap-1.5 text-red-400 transition-colors group"
           onClick={handleLike}>
             <Heart className="w-5 h-5 stroke-[1.5] fill-red-400 transition-colors" />
-            <span className="font-medium">{post.like}</span>
+            <span className="font-medium">{post.like+1}</span>
           </button>
           : <button className="flex items-center gap-1.5 hover:text-red-400 transition-colors group"
           onClick={handleLike}>

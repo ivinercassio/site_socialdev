@@ -50,12 +50,22 @@ export async function getPostById(id: number | string): Promise<PostResponse | n
   }
 }
 
-export async function markPostAsLiked(id:number, cont:number, ) {
+export async function likePost(id: number) {
   try {
-    const response = await api.put<PostResponse[]>(`posts/${id}/`, {like: cont});
+    const response = await api.patch<PostResponse>(`posts/${id}/like/`);
     return response.data; 
   } catch (error) {
-    console.error("Falha ao atualizar o contado de likes Post!", error);
+    console.error("Falha ao dar o like no Post!", error);
+    return null;
+  }
+}
+
+export async function unlikePost(id: number) {
+  try {
+    const response = await api.patch<PostResponse>(`posts/${id}/unlike/`);
+    return response.data; 
+  } catch (error) {
+    console.error("Falha ao remover o like no Post!", error);
     return null;
   }
 }
