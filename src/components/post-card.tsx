@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import type { Midea } from '../models/Midea';
 import type { Tag } from '../models/Tag';
 import { getAllTagsByPostId } from '../models/PostTag';
+import { reportPost } from '../models/Report';
 
 export function PostCard({ post }: { post: PostResponse }) {
 
@@ -49,6 +50,15 @@ export function PostCard({ post }: { post: PostResponse }) {
     }
     loadTagsPost();
   }, []);
+
+  const handleReport = async (reason: string) => {
+    try {
+      const response = await reportPost(post, reason);
+      if (response !== null) console.log("Report do post criado com sucesso!");
+    } catch (error) {
+      console.error("Falha ao criar o report do post! ", error);
+    }
+  };
 
   return (
     <article className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-2xl font-sans text-sm overflow-hidden shadow-xl">
@@ -148,9 +158,7 @@ export function PostCard({ post }: { post: PostResponse }) {
         {/* Lado Direito: Botão Report - Sutil */}
         <ReportModal
           type="post"
-          onConfirm={(reason) => {
-            console.log("Comentário denunciado! Motivo:", reason)
-          }}
+          onConfirm={(reason) => {handleReport(reason)}}
           trigger={
             <button className="px-3 py-1 text-xs font-medium text-neutral-400 rounded-md border border-neutral-700 hover:bg-red-950/50 hover:text-red-400 hover:border-red-400 transition-colors">
               Report
