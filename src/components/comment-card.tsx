@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { CommentResponse } from "../models/Comment";
 import { getMideaProfileUserById, type Midea } from "../models/Midea";
 import { ReportModal } from "./report-modal";
+import { reportComment } from "../models/Report";
 
 interface CommentProps {
   data: CommentResponse
@@ -17,6 +18,15 @@ export function CommentCard( {data}: CommentProps) {
     }
     loadMidea()
   }, []);
+
+  const handleReport = async (reason: string) => {
+    try {
+      const response = await reportComment(data, reason);
+      if (response !== null) console.log("Report do commentário criado com sucesso!");
+    } catch (error) {
+      console.error("Falha ao criar o report do commentário! ", error);
+    }
+  };
 
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-start gap-4 shadow-lg transition-colors hover:border-zinc-700">
@@ -46,9 +56,7 @@ export function CommentCard( {data}: CommentProps) {
       {/* Lado Direito: Botão Report - Sutil */}
         <ReportModal
         type="comment"
-        onConfirm={(reason) => {
-            console.log("Comentário denunciado! Motivo:", reason)
-        }}
+        onConfirm={(reason) => {handleReport(reason)}}
         trigger={
             <button className="px-3 py-1 text-xs font-medium text-neutral-400 rounded-md border border-neutral-700 hover:bg-red-950/50 hover:text-red-400 hover:border-red-400 transition-colors">
             Report
