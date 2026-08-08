@@ -9,26 +9,20 @@ import type { Tag } from '../models/Tag';
 import { getAllTagsByPostId } from '../models/PostTag';
 import { getAllCommentsByPostId, type CommentResponse } from '../models/Comment';
 import { reportPost } from '../models/Report';
+import { sendFriendRequest } from '../models/Request';
+import { useUser } from '../contexts/UserContext';
 
-export function PostCard({ post }: { post: PostResponse }) {
+export function PostCard({ post, friends }: { post: PostResponse, friends: boolean}) {
 
   const navigate = useNavigate();
+  const { user } = useUser();
   const [imageUser, setImageUser] = useState<Midea>();
   const [imagesPost, setImagesPost] = useState<Midea[]>([]);
   const [tagsPost, setTagsPost] = useState<Tag[]>([]);
   const [comments, setComments] = useState<CommentResponse[]>([]);
   const [liked, setLiked] = useState<boolean>(false);
+  const [sendFollow, setSendFollow] = useState<boolean>(false);
 
-  const handleLike = async () => {
-    if (!liked) {
-      await likePost(post.id);
-      setLiked(true);
-    } else {
-      await unlikePost(post.id);
-      setLiked(false);
-    }
-  };
-  
   useEffect(() => {
     async function loadData() {
       const getProfile = await getMideaProfileUserById(post.author);
@@ -43,12 +37,35 @@ export function PostCard({ post }: { post: PostResponse }) {
     loadData();
   }, []);
 
+  const handleLike = async () => {
+    if (!liked) {
+      await likePost(post.id);
+      setLiked(true);
+    } else {
+      await unlikePost(post.id);
+      setLiked(false);
+    }
+  };
+
   const handleReport = async (reason: string) => {
     try {
       const response = await reportPost(post, reason);
       if (response !== null) console.log("Report do post criado com sucesso!");
     } catch (error) {
       console.error("Falha ao criar o report do post! ", error);
+    }
+  };
+
+  const handleFollow = async () => {
+    try {
+      const response = await sendFriendRequest(post.author);
+      if (response !== null) {
+        setSendFollow(true);
+        console.log("Friend Request enviada com sucesso!");
+      }
+    } catch (error) {
+      setSendFollow(false);
+      console.error("Falha ao enviar Friend Request! ", error);
     }
   };
 
@@ -79,9 +96,12 @@ export function PostCard({ post }: { post: PostResponse }) {
             {new Date(post.date_published).toLocaleDateString('pt-BR')}
           </time>
           {/* Botão + Follow - Estilo Dark Button */}
-          <button className="px-4 py-1.5 rounded-full font-semibold bg-neutral-100 text-neutral-950 hover:bg-neutral-300 transition-colors">
-            + Follow
+          {!friends && post.author !== user?.id && (
+            <button className="px-4 py-1.5 rounded-full font-semibold bg-neutral-100 text-neutral-950 hover:bg-neutral-300 transition-colors"
+            onClick={handleFollow}>
+            {sendFollow ? "Send Request" : "+ Follow"}
           </button>
+          )}
         </div>
       </header>
 

@@ -5,30 +5,30 @@ import { PostCard } from './post-card';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 
-export function Feed({ posts }: { posts: PostResponse[] }) {
+export function Feed({ posts, friends }: { posts: PostResponse[], friends: boolean }) {
   const { id } = useParams();
   const { user } = useUser();
   const [userAuthor, setUserAuthor] = useState<User | null>(null);
     
-    useEffect(() => {
-      async function loadUserAuthor() {
-        if (Number(id) != user!.id) {
-          const data = await getUserById(Number(id));
-          setUserAuthor(data!); 
-        } else {
-          setUserAuthor(user);
-        }
+  useEffect(() => {
+    async function loadUserAuthor() {
+      if (id && Number(id) != user!.id) {
+        const data = await getUserById(Number(id));
+        setUserAuthor(data!); 
+      } else {
+        setUserAuthor(user);
       }
-      loadUserAuthor();
-    }, []);
+    }
+    loadUserAuthor();
+  }, []);
 
-  if (!Array.isArray(posts) || posts.length === 0) {
+  if (id && !Array.isArray(posts) || posts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-12 bg-neutral-950 text-neutral-100 font-sans">
         <p className="text-base font-medium">Nothing posted yet</p>
       </div>
     );
-  } else if (userAuthor != null && !userAuthor.public) {
+  } else if (id && userAuthor != null && !userAuthor.public) {
     return (
       <div className="flex flex-col items-center justify-center p-12 bg-neutral-950 text-neutral-100 font-sans">
         <p className="text-base font-medium">This profile is private</p>
@@ -42,6 +42,7 @@ export function Feed({ posts }: { posts: PostResponse[] }) {
         <PostCard
           key={post.id} 
           post={post}
+          friends={friends}
         />
       ))}
     </div>

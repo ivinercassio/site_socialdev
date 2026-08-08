@@ -23,7 +23,7 @@ export function AppProfile() {
       }
     }
     loadMideaProfile();
-  }, []);
+  }, [id]);
   
   useEffect(() => {
     async function loadUserData() {

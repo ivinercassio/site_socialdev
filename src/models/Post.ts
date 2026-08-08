@@ -30,6 +30,16 @@ export async function getAllPostsByUserId(id: number): Promise<PostResponse[] | 
   }
 }
 
+export async function getAllFriendsPosts(): Promise<PostResponse[] | null> {
+  try {
+    const response = await api.get<PostResponse[]>('posts/friends/');
+    return response.data; 
+  } catch (error) {
+    console.error("Falha ao realizar get dos Friends Posts!", error);
+    return null;
+  }
+}
+
 export async function getAllPosts(): Promise<PostResponse[] | null> {
   try {
     const response = await api.get<PostResponse[]>('posts/');

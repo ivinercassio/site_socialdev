@@ -26,3 +26,13 @@ export async function getAllFriendsByUserId(id:number) : Promise<FriendResponse[
     return null;
   }
 }
+
+export async function checkAreFriends(id:number) : Promise<FriendResponse | null> {
+  try {
+    const response = await api.get<FriendResponse>(`friends/${id}/areFriends/`);
+    return response.data; 
+  } catch (error) {
+    console.error("Falha ao realizar get de verificação de amizade do usuário!", error);
+    return null;
+  }
+}
