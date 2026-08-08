@@ -8,7 +8,7 @@ export interface FRequest {
   date_request: Date;
 }
 
-export interface FRquestResponse {
+export interface FRequestResponse {
   id: number;
   user_one: number;
   user_one_username: string;
@@ -20,10 +20,20 @@ export interface FRquestResponse {
 export async function sendFriendRequest(two: number) {
   const object = { user_two: two };
   try {
-    const response = await api.post<FRquestResponse>(`friend_requests/`, object);
+    const response = await api.post<FRequestResponse>(`friend_requests/`, object);
     return response.data; 
   } catch (error) {
-    console.error("Falha ao realizar get dos amigos do usuário!", error);
+    console.error("Falha ao enviar friend request do usuário!", error);
+    return null;
+  }
+}
+
+export async function getAllRequestsByUserId(id: number) {
+  try {
+    const response = await api.get<FRequestResponse[]>(`friend_requests/${id}/user/`);
+    return response.data; 
+  } catch (error) {
+    console.error("Falha ao realizar get das friend requests recebidas pelo usuário!", error);
     return null;
   }
 }

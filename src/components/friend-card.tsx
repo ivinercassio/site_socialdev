@@ -1,31 +1,22 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button' 
 import type { FriendResponse } from '../models/Friend';
-import { getCurrentUser } from '../models/LoginDTO';
 import { useEffect, useState } from 'react';
 import { getUserById, type User } from '../models/User';
-import { getMideaProfile, getMideaProfileUserById, type Midea } from '../models/Midea';
-
-
-// interface FriendCardProps {
-//   avatarUrl?: string
-//   username?: string
-//   friendsSince?: string
-//   isPrivate?: boolean
-//   onUnfollow?: () => void
-// }
+import { getMideaProfileUserById, type Midea } from '../models/Midea';
+import { useUser } from '../contexts/UserContext';
 
 export function FriendCard({ data }: { data: FriendResponse }) {
 
   const navigate = useNavigate();
-  const user = getCurrentUser();
+  const { user } = useUser();
   const [userFriend, setUserFriend] = useState<User>();
   const [image, setImage] = useState<Midea>();
 
   useEffect(() => {
     async function loadUserFriend() {
       let param;
-      data.friend_one === user.id ? param = data.friend_two : param = data.friend_one;
+      data.friend_one === user?.id ? param = data.friend_two : param = data.friend_one;
       const response = await getUserById(param);
       setUserFriend(response!);
     }

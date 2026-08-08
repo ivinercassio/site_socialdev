@@ -1,26 +1,26 @@
 import { ShowList } from '../components/show-list';
-import { RequestFriendCard } from '../components/request-friend-card';
+import { FriendRequestCard } from '../components/friend-request-card';
 import { FriendCard } from '../components/friend-card';
 import { SearchBar } from '../components/search-bar';
-import { getCurrentUser } from '../models/LoginDTO';
 import { getAllFriendsByUserId, type FriendResponse } from '../models/Friend';
 import { useEffect, useState } from 'react';
+import { useUser } from '../contexts/UserContext';
+import { getAllRequestsByUserId, type FRequestResponse } from '../models/Request';
 
 export function Friends() {
-  const requestsData = [
-    { id: '1', username: 'john_doe', date: '23/05/2026', isPublic: true },
-  ];
-
-  const user = getCurrentUser();
+  const { user } = useUser();
   const [friends, setFriends] = useState<FriendResponse[]>([]);
+  const [requests, setRequests] = useState<FRequestResponse[]>([]);
   
     useEffect(() => {
-      async function loadFriends() {
-        const data = await getAllFriendsByUserId(user.id);
-        setFriends(data!);
+      async function loadData() {
+        const allFriends = await getAllFriendsByUserId(user.id);
+        setFriends(allFriends!);
+        const allRequests = await getAllRequestsByUserId(user.id);
+        setRequests(allRequests!);
       }
-      loadFriends();
-    }, []);
+      loadData();
+    }, [user]);
 
   return (
     <div className="bg-neutral-950 text-neutral-100 min-h-screen flex flex-col">
@@ -40,8 +40,8 @@ export function Friends() {
             sections={[
               {
                 title: 'Requests Friendship',
-                items: requestsData.map(req => (
-                  <RequestFriendCard key={req.id} data={req} />
+                items: requests.map(req => (
+                  <FriendRequestCard key={req.id} data={req} />
                 )),
               },
               {
